@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-         Schema::create('marcas', function (Blueprint $table) {
-            $table->id();
-            $table->string('nombre', 100)->unique(); 
-            $table->text('descripcion')->nullable(); 
-            $table->timestamps();
-        });
+        Schema::create('roles', function (Blueprint $table) {
+        $table->id();
+        $table->string('nombre'); 
+        $table->timestamps();
+    });
     }
 
     /**
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('marcas');
+        Schema::dropIfExists('roles');
     }
 };
