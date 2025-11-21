@@ -11,11 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('movements', function (Blueprint $table) {
+         Schema::create('movements', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+            $table->foreignId('supplier_id')->constrained('suppliers')->onDelete('cascade');
+            $table->enum('type', ['entrada', 'salida']);
+            $table->integer('quantity');
+            $table->decimal('cost', 10, 2)->nullable();
+            $table->date('date');
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.
