@@ -33,7 +33,7 @@ class ReportController extends Controller
         } catch (\Exception $e) {
             
             
-            dd("¡ERROR CRÍTICO! Tu ReportController no pudo ejecutarse.", "Causa:", $e->getMessage()); 
+            
         }
     }
     
