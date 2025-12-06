@@ -9,7 +9,7 @@ class Producto extends Model
 {
     use HasFactory;
     
-    // Esto corrige el error de "productos no existe"
+   
     protected $table = 'products'; 
     
     protected $fillable = [
