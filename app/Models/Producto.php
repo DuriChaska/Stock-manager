@@ -26,4 +26,9 @@ class Producto extends Model
         
         return $this->belongsTo(Marca::class);
     }
+
+    public function movimientos()
+    {
+        return $this->hasMany(Movimiento::class);
+    }
 }
