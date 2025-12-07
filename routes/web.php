@@ -17,9 +17,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/inventario', [ProductoController::class, 'index'])->name('productos.index'); // Muestra la tabla
-    Route::get('/inventario/crear', [ProductoController::class, 'create'])->name('productos.create'); // Muestra el formulario
-    Route::post('/inventario', [ProductoController::class, 'store'])->name('productos.store'); // Procesa el formulario (Guardar)
+    Route::get('/inventario', [ProductoController::class, 'index'])->name('productos.index'); 
+    Route::get('/inventario/crear', [ProductoController::class, 'create'])->name('productos.create');
+    Route::post('/inventario', [ProductoController::class, 'store'])->name('productos.store');
 });
 
 require __DIR__.'/auth.php';
