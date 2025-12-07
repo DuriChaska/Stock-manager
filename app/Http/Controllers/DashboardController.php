@@ -11,7 +11,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // === TARJETAS ===
+        //targetas resumen
         $total_productos = Producto::sum('existencia');
         $existencia_baja_count = Producto::where('existencia', '<', 10)->count();
 
@@ -22,7 +22,7 @@ class DashboardController extends Controller
         $ventas_hoy = $movimientos_hoy->sum('cantidad');
         $ingresos_hoy = $movimientos_hoy->sum('costo');
 
-        // === GRÁFICA DE SEMANA: VENTAS POR DÍA ===
+        //grafica barras ventas semanales
         $dias = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
         $weekly_sales_data = [];
 
@@ -32,12 +32,12 @@ class DashboardController extends Controller
                 ->sum('cantidad');
         }
 
-        // === STOCK POR MARCA ===
+        //grafica dona marcas
         $brand_distribution = Marca::withSum('productos as total_stock', 'existencia')->get();
         $brand_distribution_labels = $brand_distribution->pluck('nombre')->toArray();
         $brand_distribution_data = $brand_distribution->pluck('total_stock')->toArray();
 
-        // === TOP 5 PRODUCTOS MÁS VENDIDOS ===
+        //5 productos más vendidos
         $top_products = Producto::select('productos.*')
             ->join('movimientos', 'productos.id', '=', 'movimientos.producto_id')
             ->where('movimientos.tipo', 'salida')

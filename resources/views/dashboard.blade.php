@@ -3,29 +3,27 @@
 @section('content')
 <div class="p-6 space-y-6">
 
-    {{-- 🔍 BUSCADOR GLOBAL --}}
+{{-- buscador --}}
     <div class="relative flex items-center w-full px-4 py-2 bg-gray-100 rounded-lg">
         <input id="searchInput" type="text" placeholder="Buscar productos..." 
                class="flex-1 text-sm bg-transparent rounded-lg outline-none">
 
         <img src="{{ asset('images/3844432-magnifier-search-zoom_110300.png') }}" alt="Buscar" class="w-5 h-5 ml-2 cursor-pointer" />
 
-        {{-- Resultados --}}
         <div id="resultBox"
              class="absolute left-0 z-50 hidden w-full mt-1 overflow-hidden transition-all duration-200 bg-white rounded shadow-lg top-full">
         </div>
-    </div>
+    </div>  
 
-    {{-- Título --}}
     <div>
         <h1 class="text-3xl font-bold">Dashboard</h1>
         <p class="text-gray-600">Resumen general del inventario y ventas</p>
     </div>
 
-    {{-- TARJETAS --}}
+    {{-- targetas--}}
     <div class="grid grid-cols-4 gap-4">
         
-        {{-- Total Productos --}}
+        {{-- productos --}}
         <a href="{{ route('productos.index') }}"class="flex items-center justify-between p-4 transition shadow bg-lime-200 hover:bg-lime-300 rounded-xl">
         <div class="flex flex-col">
             <span class="text-lg font-semibold">Total Productos </span>
@@ -34,7 +32,7 @@
         <img src="{{ asset('images/wondicon-ui-free-parcel_111208.png') }}" alt="Icono de Productos" class="w-12 h-12" />
         </a>
 
-        {{-- Stock Bajo --}}
+        {{-- stock bajo --}}
         <a href="{{ route('stock.bajo') }}"class="flex items-center justify-between p-4 transition bg-red-200 shadow hover:bg-red-300 rounded-xl">
         <div class="flex flex-col">
             <span class="text-lg font-semibold">Stock bajo</span>
@@ -44,7 +42,7 @@
         <img src="{{ asset('images/analytics_statistics_arrow_chart_graph_stock_icon_267146.png') }}" alt="Icono de Advertencia" class="w-12 h-12" />
         </a>
 
-       {{-- Ventas Hoy --}}
+       {{-- ventas --}}
         <a href="{{ route('ventas.hoy') }}"class="flex items-center justify-between p-4 transition shadow bg-lime-100 hover:bg-lime-200 rounded-xl">
         <div class="flex flex-col">
             <span class="text-lg font-semibold">Ventas hoy</span>
@@ -53,7 +51,7 @@
         <img src="{{ asset('images/4105931-add-to-cart-buy-cart-sell-shop-shopping-cart_113919.png') }}" alt="Icono de Ventas" class="w-12 h-12" />
         </a>
 
-        {{-- Ingresos Hoy --}}
+        {{-- ingresos --}}
         <a href="{{ route('ventas.hoy') }}"class="flex items-center justify-between p-4 transition bg-green-100 shadow hover:bg-green-200 rounded-xl">
         <div class="flex flex-col">
             <span class="text-lg font-semibold">Ingresos hoy</span>
@@ -63,22 +61,22 @@
         </a>
     </div>
 
-    {{-- GRÁFICAS --}}
+    {{-- graficas --}}
     <div class="grid grid-cols-2 gap-6">
-        {{-- BARRAS --}}
+        {{-- barras --}}
         <div class="p-6 bg-white shadow-lg rounded-2xl">
             <h3 class="mb-4 text-lg font-bold">Ventas de la semana</h3>
             <canvas id="weeklyChart"></canvas>
         </div>
 
-        {{-- DONA --}}
+        {{-- dona --}}
         <div class="p-6 bg-white shadow-lg rounded-2xl">
             <h3 class="mb-4 text-lg font-bold">Distribución de marcas</h3>
             <canvas id="brandChart"></canvas>
         </div>
     </div>
 
-    {{-- TOP PRODUCTOS --}}
+    {{-- top --}}
     <div class="p-6 bg-white shadow-lg rounded-2xl">
         <h3 class="mb-4 text-lg font-bold">Productos más vendidos este mes</h3>
         
@@ -101,13 +99,13 @@
 
 </div>
 
-{{-- SCRIPTS CHART.JS v4 --}}
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    // === GRÁFICA BARRAS ===
+    //grafica barras
     new Chart(document.getElementById('weeklyChart'), {
         type: 'bar',
         data: {
@@ -127,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // === GRÁFICA DONA ===
+    //dona
     new Chart(document.getElementById('brandChart'), {
         type: 'doughnut',
         data: {
@@ -147,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
-    // === BUSCADOR LIVE ===
+    //buscador
     const searchInput = document.querySelector('#searchInput');
     const resultBox = document.querySelector('#resultBox');
 

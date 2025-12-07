@@ -8,17 +8,17 @@
     <title>{{ config('app.name', 'Stock Managger') }}</title>
     <link rel="icon" type="image/png" href="{{ asset('images/logo-nav.png') }}">
 
-    <!-- Fonts -->
+
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <!-- Scripts -->
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased">
 <div class="flex min-h-screen bg-white">
 
-    {{-- SIDEBAR --}}
+    {{-- barra lateral --}}
     <aside class="fixed h-full text-black transition-all duration-300 bg-white shadow w-60">
         <div class="p-6 text-xl font-bold text-center border-b border-gray-700">
             <img src="/images/logo-nav.png" class="w-12 mx-auto mb-2" alt="Logo">
@@ -28,7 +28,7 @@
         <nav class="mt-6">
             <ul class="space-y-1">
 
-                {{-- Dashboard --}}
+                {{-- dashboard --}}
                 <li>
                     <a href="{{ route('dashboard') }}"
                         class="flex items-center gap-3 px-6 py-3 hover:bg-[#97BB5C] transition
@@ -38,7 +38,7 @@
                     </a>
                 </li>
 
-                {{-- Productos --}}
+                {{-- inventario --}}
                 <li>
                     <a href="{{ route('productos.index') }}"
                         class="flex items-center gap-3 px-6 py-3 hover:bg-[#97BB5C] transition
@@ -48,7 +48,7 @@
                     </a>
                 </li>
 
-                {{-- Ventas --}}
+                {{-- movimientos --}}
                 <li>
                     <a href="{{ route('movimientos.index') }}"
                         class="flex items-center gap-3 px-6 py-3 hover:bg-[#97BB5C] transition
@@ -58,27 +58,27 @@
                     </a>
                 </li>
 
-                {{-- Proveedores --}}
+                {{-- reportes --}}
                 <li>
-                    <a href="{{ route('proveedores.index') }}"
+                    <a href="{{ route('reportes.index') }}"
                         class="flex items-center gap-3 px-6 py-3 hover:bg-[#97BB5C] transition
-                        {{ request()->routeIs('proveedores.*') ? 'bg-[#97BB5C]' : '' }}">
+                        {{ request()->routeIs('reportes.*') ? 'bg-[#97BB5C]' : '' }}">
                         <img src="/images/graphical-business-presentation-on-a-screen_icon-icons.com_73240.png" class="w-5">
                         <span>Reportes</span>
                     </a>
                 </li>
                 
-                {{-- Proveedores --}}
+                {{-- usuarios --}}
                 <li>
-                    <a href="{{ route('proveedores.index') }}"
+                    <a href="{{ route('usuarios.index') }}"
                         class="flex items-center gap-3 px-6 py-3 hover:bg-[#97BB5C] transition
-                        {{ request()->routeIs('proveedores.*') ? 'bg-[#97BB5C]' : '' }}">
+                        {{ request()->routeIs('usuarios.*') ? 'bg-[#97BB5C]' : '' }}">
                         <img src="/images/4105943-accounts-group-people-user-user-group-users_113923.png" class="w-5">
                         <span>Usuarios</span>
                     </a>
                 </li>
                 
-                {{-- Proveedores --}}
+                {{-- proveedores --}}
                 <li>
                     <a href="{{ route('proveedores.index') }}"
                         class="flex items-center gap-3 px-6 py-3 hover:bg-[#97BB5C] transition
@@ -92,7 +92,7 @@
         </nav>
     </aside>
 
-    {{-- CONTENIDO --}}
+    {{-- contenido --}}
     <div class="flex-1 ml-60">
         @include('layouts.navigation')
 
