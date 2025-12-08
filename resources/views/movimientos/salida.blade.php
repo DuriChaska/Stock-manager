@@ -100,17 +100,29 @@
 
                 </div>
 
-                {{-- Buttons --}}
-                <div class="flex justify-end gap-4 mt-10">
-                    <button type="reset" class="px-6 py-2 bg-gray-100 rounded-xl hover:bg-gray-200">Limpiar</button>
+                 {{-- BOTONES --}}
+                <div class="flex justify-between mt-10">
 
-                    <a href="{{ route('movimientos.index') }}" class="px-6 py-2 bg-gray-100 rounded-xl hover:bg-gray-200">Cancelar</a>
+                {{-- Limpiar --}}
+                <button type="reset"
+                        class="px-6 py-3 text-gray-700 transition border border-gray-400 rounded-full hover:bg-gray-200">
+                    Limpiar
+                </button>
+
+                <div class="flex gap-4">
+
+                    {{-- Cancelar --}}
+                    <a href="{{ route('movimientos.index') }}"
+                       class="px-6 py-3 text-gray-700 transition border border-gray-400 rounded-full hover:bg-gray-200">
+                        Cancelar
+                    </a>
 
                     <button type="submit" 
-                        class="flex items-center gap-2 px-8 py-2 text-black bg-[#97BB5C] rounded-xl hover:bg-[#749646]">
+                        class="flex items-center gap-2 px-8 py-2 text-black bg-[#97BB5C] rounded-full hover:bg-[#749646]">
                         <img src="{{ asset('images/savedisk_121993.png') }}" class="w-5 h-5" alt="Guardar">
                         Guardar Movimiento
                     </button>
+
                 </div>
             </form>
         </div>

@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Models\User;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -24,10 +25,20 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        // Autenticar credenciales
         $request->authenticate();
 
+        // Guardar el último inicio de sesión
+        if (Auth::check()) {
+    Auth::user()->update([
+        'last_login_at' => now()
+    ]);
+}
+
+        // Regenerar la sesión para evitar ataques de fijación
         $request->session()->regenerate();
 
+        // Redirigir al dashboard
         return redirect()->intended(route('dashboard', absolute: false));
     }
 

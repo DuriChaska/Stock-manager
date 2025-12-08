@@ -87,13 +87,13 @@
             <a href="{{ route('movimientos.entrada') }}" 
                class="flex items-center gap-2 px-4 py-2 font-semibold text-white bg-[#97BB5C] shadow-md rounded-xl hover:bg-[#749646]">
                
-                Agregar Entrada
+                + Agregar Entrada
             </a>
 
             <a href="{{ route('movimientos.salida') }}" 
                class="flex items-center gap-2 px-4 py-2 font-semibold text-red-700 bg-red-100 border border-red-300 shadow-md rounded-xl hover:bg-red-200">
 
-                Agregar Salida
+                - Agregar Salida
             </a>
         </div>
 
