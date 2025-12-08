@@ -11,19 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('marcas', function (Blueprint $table) {
+        Schema::create('suppliers', function (Blueprint $table) {
         $table->id();
-        $table->string('nombre'); 
+        $table->string('company_name');
+        $table->string('contact_name');
+        $table->string('email')->nullable();
+        $table->string('phone')->nullable();
+        $table->string('address')->nullable();
+        $table->text('description')->nullable();
         $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('marcas');
+        Schema::dropIfExists('suppliers');
     }
 };

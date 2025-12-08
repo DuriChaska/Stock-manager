@@ -7,7 +7,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Movimiento extends Model
 {
-    
+     protected $fillable = [
+        'usuario_id',
+        'producto_id',
+        'proveedor_id',
+        'tipo',
+        'cantidad',
+        'costo',
+        'fecha',
+    ];
     public function usuario(): BelongsTo
     {
         return $this->belongsTo(Usuario::class);

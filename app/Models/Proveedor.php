@@ -7,6 +7,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Proveedor extends Model
 {
+    protected $table = 'proveedores';
+
+    protected $fillable = [
+        'nombre_empresa',
+        'nombre_contacto',
+        'email',
+        'telefono',
+        'direccion',
+        'descripcion',
+        'activo'
+    ];
+
+
+    // Relación: Un proveedor puede tener muchos movimientos
     public function movimientos(): HasMany
     {
         return $this->hasMany(Movimiento::class);
