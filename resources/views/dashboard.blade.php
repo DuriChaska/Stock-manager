@@ -2,18 +2,7 @@
 
 @section('content')
 <div class="p-6 space-y-6">
-
-{{-- buscador --}}
-    <div class="relative flex items-center w-full px-4 py-2 bg-gray-100 rounded-lg">
-        <input id="searchInput" type="text" placeholder="Buscar productos..." 
-               class="flex-1 text-sm bg-transparent rounded-lg outline-none">
-
-        <img src="{{ asset('images/3844432-magnifier-search-zoom_110300.png') }}" alt="Buscar" class="w-5 h-5 ml-2 cursor-pointer" />
-
-        <div id="resultBox"
-             class="absolute left-0 z-50 hidden w-full mt-1 overflow-hidden transition-all duration-200 bg-white rounded shadow-lg top-full">
-        </div>
-    </div>  
+    
 
     <div>
         <h1 class="text-3xl font-bold">Dashboard</h1>
@@ -145,34 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
-    //buscador
-    const searchInput = document.querySelector('#searchInput');
-    const resultBox = document.querySelector('#resultBox');
-
-    function buscar() {
-        const q = searchInput.value;
-
-        if (q.length < 2) {
-            resultBox.classList.add('hidden');
-            return;
-        }
-
-        fetch(`/buscar-productos?q=${q}`)
-            .then(res => res.json())
-            .then(data => {
-                resultBox.innerHTML = data.length === 0
-                    ? `<p class='px-3 py-2 text-sm text-gray-500'>No se encontraron productos</p>`
-                    : data.map(p =>
-                        `<a href="/productos/${p.id}" 
-                          class="block px-3 py-2 text-sm transition hover:bg-gray-100">
-                            ${p.nombre}
-                        </a>`
-                    ).join('');
-                resultBox.classList.remove('hidden');
-            });
-    }
-
-    searchInput.addEventListener('input', buscar);
+    
 
 });
 </script>
