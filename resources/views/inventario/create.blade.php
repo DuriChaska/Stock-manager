@@ -1,85 +1,84 @@
 @extends('layouts.app')
 
+@section('title', 'Agregar Producto')
+
 @section('content')
 
-<div class="w-full">
+<h1 class="mb-4 text-3xl font-bold">Gestión de Inventario</h1>
+<p class="mb-8 text-gray-500">Añade nuevos productos a tu inventario</p>
 
-    {{-- TITULO --}}
-    <h1 class="text-3xl font-bold text-gray-800 mb-1">Gestión de Inventario</h1>
-    <p class="text-gray-500 mb-6">Administra todos los productos de calzado</p>
+<div class="p-8 bg-white shadow-xl rounded-xl">
 
-    {{-- TARJETA DEL FORMULARIO --}}
-    <div class="bg-white w-full rounded-lg shadow p-6">
+    <h2 class="flex items-center gap-2 mb-6 text-2xl font-semibold">
+        <i class="text-green-600 fa-solid fa-plus"></i>
+        Agregar producto
+    </h2>
 
-        <h2 class="text-2xl font-bold mb-1">Registro de producto</h2>
-        <p class="text-gray-500 mb-6">Añade nuevos productos a tu inventario</p>
+    <form action="{{ route('inventario.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
 
-        <form action="{{ route('inventario.store') }}" method="POST">
-            @csrf
+        <div class="grid grid-cols-2 gap-6">
 
-            <div class="grid grid-cols-2 gap-6">
-
-                {{-- NOMBRE --}}
-                <div>
-                    <label class="font-semibold">Nombre del producto *</label>
-                    <input name="nombre" type="text"
-                        class="w-full border p-2 rounded mt-1 focus:border-olive-600"
-                        required>
-                </div>
-
-                {{-- MARCA --}}
-                <div>
-                    <label class="font-semibold">Proveedor *</label>
-                    <select name="marca_id"
-                        class="w-full border p-2 rounded mt-1 focus:border-olive-600"
-                        required>
-                        <option value="">Seleccione marca</option>
-                        @foreach ($marcas as $m)
-                            <option value="{{ $m->id }}">{{ $m->nombre }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                {{-- PRECIO --}}
-                <div>
-                    <label class="font-semibold">Precio *</label>
-                    <input name="precio" type="number" step="0.01"
-                        class="w-full border p-2 rounded mt-1"
-                        required>
-                </div>
-
-                {{-- STOCK --}}
-                <div>
-                    <label class="font-semibold">Stock inicial *</label>
-                    <input name="existencia" type="number"
-                        class="w-full border p-2 rounded mt-1"
-                        required>
-                </div>
-
+            <!-- Nombre -->
+            <div>
+                <label class="font-medium">Nombre del producto *</label>
+                <input type="text" name="nombre"
+                       class="w-full px-4 py-2 border shadow-inner rounded-xl focus:ring-2 focus:ring-green-400 focus:border-green-500"
+                       required>
             </div>
 
-            {{-- BOTONES --}}
-            <div class="flex justify-end mt-6 gap-3">
-
-                <button type="reset"
-                    class="px-4 py-2 bg-white text-gray-700 border rounded">
-                    Limpiar
-                </button>
-
-                <a href="{{ route('inventario.index') }}"
-                    class="px-4 py-2 bg-white text-gray-700 border rounded">
-                    Cancelar
-                </a>
-
-                <button type="submit"
-                    class="px-6 py-2 bg-olive-600 text-white rounded shadow hover:bg-olive-700">
-                    Guardar producto
-                </button>
-
+            <!-- Proveedor -->
+            <div>
+                <label class="font-medium">Proveedor *</label>
+                <select name="marca"
+                        class="w-full px-4 py-2 border shadow-inner rounded-xl focus:ring-2 focus:ring-green-400 focus:border-green-500"
+                        required>
+                    <option value="">Seleccione marca</option>
+                    @foreach ($proveedores as $prov)
+                        <option value="{{ $prov->nombre }}">{{ $prov->nombre }}</option>
+                    @endforeach
+                </select>
             </div>
 
-        </form>
-    </div>
+            <!-- Precio -->
+            <div>
+                <label class="font-medium">Precio *</label>
+                <input type="number" step="0.01" name="precio"
+                       class="w-full px-4 py-2 border shadow-inner rounded-xl focus:ring-2 focus:ring-green-400 focus:border-green-500"
+                       required>
+            </div>
+
+            <!-- Stock -->
+            <div>
+                <label class="font-medium">Stock inicial *</label>
+                <input type="number" name="stock"
+                       class="w-full px-4 py-2 border shadow-inner rounded-xl focus:ring-2 focus:ring-green-400 focus:border-green-500"
+                       required>
+            </div>
+
+            <!-- Imagen -->
+            <div class="col-span-2">
+                <label class="font-medium">Imagen del producto</label>
+                <input type="file" name="imagen"
+                       class="w-full px-4 py-2 border shadow-inner rounded-xl focus:ring-2 focus:ring-green-400 focus:border-green-500">
+            </div>
+
+        </div>
+
+        <!-- Botones -->
+        <div class="flex justify-end gap-4 mt-8">
+            <a href="{{ route('inventario.index') }}"
+               class="px-5 py-2 transition bg-gray-200 rounded-full hover:bg-gray-300">
+               Cancelar
+            </a>
+
+            <button type="submit"
+                    class="px-6 py-2 text-white transition bg-green-600 rounded-full shadow-md hover:bg-green-700">
+                <i class="mr-1 fa-solid fa-save"></i> Guardar producto
+            </button>
+        </div>
+
+    </form>
 
 </div>
 
