@@ -3,59 +3,52 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB; 
-use Illuminate\Support\Collection;
-
-
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
     
     public function index()
     {
-       try {
-           
-            $totalProductos = DB::table('products')->count(); 
-            
-           
-         
-            $totalVentas = 0;
-            
-            $productosBajoStock = collect(); 
+        try {
 
-            
-           return view('reports.index', [ 
+            // Usa la tabla correcta
+            $totalProductos = DB::table('productos')->count();
+
+            // Valores por ahora en 0
+            $totalVentas = 0;
+            $productosBajoStock = collect();
+
+            return view('reports.index', [
                 'totalProductos' => $totalProductos,
                 'totalVentas' => $totalVentas,
                 'productosBajoStock' => $productosBajoStock,
             ]);
 
         } catch (\Exception $e) {
-            
-            
-            
+
+            // Muestra el error real
+            return dd("Error en ReportController@index:", $e->getMessage());
         }
     }
-    
-    
-    
-    public function ventasIngresos() 
-    { 
-        return view('reportes.ventas-ingresos'); 
+
+    public function ventasIngresos()
+    {
+        return view('reports.ventas_ingresos');
     }
-    
-    public function ventasPorMarca() 
-    { 
-        return view('reportes.ventas-marca'); 
+
+    public function ventasPorMarca()
+    {
+        return view('reports.ventas_por_marca');
     }
-    
-    public function productosMasVendidos() 
-    { 
-        return view('reportes.productos-mas-vendidos'); 
+
+    public function productosMasVendidos()
+    {
+        return view('reports.productos_mas_vendidos');
     }
-    
-    public function evolucionInventario() 
-    { 
-        return view('reportes.evolucion-inventario'); 
+
+    public function evolucionInventario()
+    {
+        return view('reports.evolucion_inventario');
     }
 }

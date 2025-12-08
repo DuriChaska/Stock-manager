@@ -12,6 +12,8 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet"/>
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased bg-gray-100">
@@ -60,16 +62,18 @@
 
 
                 <li>
-                    <a href="#" 
-                       class="flex items-center gap-3 px-6 py-3 hover:bg-[#97BB5C] transition rounded-full">
+                    <a href="{{ route('reportes.index') }}" 
+                        class="flex items-center gap-3 px-6 py-3 hover:bg-[#97BB5C] transition rounded-full
+                        {{ request()->routeIs('reportes.*') ? 'bg-[#97BB5C]' : '' }}">
                         <img src="/images/graphical-business-presentation-on-a-screen_icon-icons.com_73240.png" class="w-5">
                         <span>Reportes</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="#" 
-                       class="flex items-center gap-3 px-6 py-3 hover:bg-[#97BB5C] transition rounded-full">
+                    <a href="{{ route('usuarios.index') }}" 
+                        class="flex items-center gap-3 px-6 py-3 hover:bg-[#97BB5C] transition rounded-full
+                        {{ request()->routeIs('usuarios.*') ? 'bg-[#97BB5C]' : '' }}">
                         <img src="/images/4105943-accounts-group-people-user-user-group-users_113923.png" class="w-5">
                         <span>Usuarios</span>
                     </a>
@@ -150,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.addEventListener('input', buscar);
 });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
