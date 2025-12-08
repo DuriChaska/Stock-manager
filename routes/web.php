@@ -11,7 +11,6 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReportController; 
 
 
-// Redirección al login
 Route::get('/', function () {
     return redirect()->route('login');
 });
@@ -19,30 +18,13 @@ Route::get('/', function () {
 require __DIR__.'/auth.php';
 
 
-// ------------------------------------------
-//  RUTAS PROTEGIDAS POR LOGIN
-// ------------------------------------------
-Route::middleware(['auth', 'verified'])->group(function () {
 
-    // Dashboard
+    Route::middleware(['auth', 'verified'])->group(function () {
+
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-
-    // -------------------------
-    // CRUD Productos
-    // -------------------------
-    Route::resource('productos', ProductoController::class);
-
-
-    // -------------------------
-    // CRUD Proveedores
-    // -------------------------
-    Route::resource('proveedores', ProveedorController::class);
-
-
-    // -------------------------
-    // CRUD Usuarios (Alexis)
-    // -------------------------
+        Route::resource('productos', ProductoController::class);
+        Route::resource('proveedores', ProveedorController::class);
     Route::resource('usuarios', UserController::class);
 
 
