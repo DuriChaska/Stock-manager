@@ -1,69 +1,15 @@
 @extends('layouts.app')
 
-@section('content')
-<div class="flex w-full">
-
-    {{-- SIDEBAR --}}
-    <aside class="w-64 min-h-screen p-6 bg-white shadow-md">
-        <div class="flex items-center gap-2 text-xl font-semibold">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="object-contain mt-10 w-28 h-28">
-            STOCK MANAGER
-        </div>
-
-        <nav class="mt-8 space-y-4">
-            <a href="{{ route('dashboard') }}" class="flex items-center gap-2 text-gray-700 hover:text-green-600">
-                <img src="{{ asset('images/dashboard_icon_221153.png') }}" class="w-6 h-6" alt="">
-                Dashboard
-            </a>
-            <a href="#" class="flex items-center gap-2 text-gray-700 hover:text-green-600">
-                <img src="{{ asset('images/wondicon-ui-free-parcel_111208.png') }}" class="w-6 h-6" alt="">
-                Inventario
-            </a>
-
-            <a href="{{ route('movimientos.index') }}" class="flex items-center gap-2 px-3 py-2 font-semibold text-green-900 bg-green-200 rounded-md">
-                <img src="{{ asset('images/arrow_data_transfer_vertical_sync_icon_183025.png') }}" class="w-4 h-4" alt="">
-                Movimientos
-            </a>
-
-            <a href="#" class="flex items-center gap-2 text-gray-700 hover:text-green-600">
-                <img src="{{ asset('images/graphical-business-presentation-on-a-screen_icon-icons.com_73240.png') }}" class="w-4 h-4" alt="">
-                Reportes
-            </a>
-
-            <a href="#" class="flex items-center gap-2 text-gray-700 hover:text-green-600">
-                <img src="{{ asset('images/4105943-accounts-group-people-user-user-group-users_113923.png') }}" class="w-4 h-4" alt="">
-                Usuarios
-            </a>
-
-            <a href="#" class="flex items-center gap-2 text-gray-700 hover:text-green-600">
-                <img src="{{ asset('images/descargar (5).png') }}" class="w-4 h-4" alt="">
-                Proveedores
-            </a>
-        </nav>
-    </aside>
-
-    {{-- CONTENIDO --}}
+@section('content')    
+<div class="p-6 space-y-6">
     <main class="flex-1 p-10">
 
-        {{-- Top bar --}}
-        <div class="flex items-center justify-between w-full pb-6">
-            <div class="w-full md:w-1/3">
-                <div class="relative">
-                    <svg class="absolute w-5 h-5 text-gray-400 left-3 top-2.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.197 5.197a7.5 7.5 0 0 0 10.606 10.606Z" />
-                    </svg>
-                    <input type="text" placeholder="Buscar" class="w-full py-2 pl-10 pr-4 border border-gray-300 rounded-full focus:ring-2 focus:ring-green-400">
-                </div>
-            </div>
+        
+        <h2 class="text-3xl font-bold">Movimientos de Inventario</h2>
+        <p class="text-gray-600">Registrar entrada de unidades a tu inventario</p>
 
-            <div class="flex items-center gap-6">
-                <img src="{{ asset('images/notification_time_bell_alert_alarm_icon_220036.png') }}" class="w-6 h-6" alt="">
-                <img src="{{ asset('images/user_man_accept_21961.png') }}" class="w-6 h-6" alt="">
-            </div>
-        </div>
-
-        <h2 class="mt-10 text-3xl font-bold">Movimientos de Inventario</h2>
-        <p class="mb-6 text-gray-600">Registrar entrada de unidades a tu inventario</p>
+        <h2 class="mb-1 text-3xl font-bold text-center">Registro de entrada de Stock</h2>
+        <p class="mb-6 text-center text-gray-600">Registrar entrada de unidades a tu inventario</p>
 
         <div class="p-10 bg-white border border-gray-200 shadow-lg rounded-2xl">
 
@@ -83,7 +29,7 @@
                     {{-- Producto --}}
                     <div>
                         <label class="block mb-1 font-semibold">Producto</label>
-                        <select name="producto_id" class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-green-400">
+                        <select name="producto_id" class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-[#97BB5C]">
                             <option value="">-- Selecciona un producto --</option>
                             @foreach($productos as $producto)
                                 <option value="{{ $producto->id }}" {{ old('producto_id') == $producto->id ? 'selected' : '' }}>
@@ -99,7 +45,7 @@
                     {{-- Proveedor --}}
                     <div>
                         <label class="block mb-1 font-semibold">Proveedor</label>
-                        <select name="proveedor_id" class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-green-400">
+                        <select name="proveedor_id" class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-[#97BB5C]">
                             <option value="">-- Selecciona un proveedor --</option>
                             @foreach($proveedores as $prov)
                                 <option value="{{ $prov->id }}" {{ old('proveedor_id') == $prov->id ? 'selected' : '' }}>
@@ -116,7 +62,7 @@
                     <div>
                         <label class="block mb-1 font-semibold">Marca (opcional)</label>
                         <input type="text" name="marca" value="{{ old('marca') }}" placeholder="Marca (se puede dejar vacío)"
-                               class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-green-400">
+                               class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-[#97BB5C]">
                         @error('marca')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -126,7 +72,7 @@
                     <div>
                         <label class="block mb-1 font-semibold">Costo unitario (MXN)</label>
                         <input type="number" name="costo" value="{{ old('costo') }}" step="0.01" min="0"
-                               class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-green-400" placeholder="0.00">
+                               class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-[#97BB5C]" placeholder="0.00">
                         @error('costo')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -136,7 +82,7 @@
                     <div>
                         <label class="block mb-1 font-semibold">Cantidad a ingresar</label>
                         <input type="number" name="cantidad" value="{{ old('cantidad') }}" min="1"
-                               class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-green-400" placeholder="Ej. 10">
+                               class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-[#97BB5C]" placeholder="Ej. 10">
                         @error('cantidad')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -146,7 +92,7 @@
                     <div>
                         <label class="block mb-1 font-semibold">Fecha de entrada</label>
                         <input type="date" name="fecha" value="{{ old('fecha', now()->toDateString()) }}"
-                               class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-green-400">
+                               class="w-full px-4 py-2 border rounded-xl focus:ring-2 focus:ring-[#97BB5C]">
                         @error('fecha')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -160,8 +106,9 @@
 
                     <a href="{{ route('movimientos.index') }}" class="px-6 py-2 bg-gray-100 rounded-xl hover:bg-gray-200">Cancelar</a>
 
-                    <button type="submit" class="flex items-center gap-2 px-8 py-2 text-white bg-green-600 rounded-xl hover:bg-green-700">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    <button type="submit" 
+                        class="flex items-center gap-2 px-8 py-2 text-black bg-[#97BB5C] rounded-xl hover:bg-[#749646]">
+                        <img src="{{ asset('images/savedisk_121993.png') }}" class="w-5 h-5" alt="Guardar">
                         Guardar Movimiento
                     </button>
                 </div>

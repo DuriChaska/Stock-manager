@@ -7,8 +7,20 @@ use App\Models\Movimiento;
 use App\Models\Marca;
 use Illuminate\Http\Request;
 
+
 class DashboardController extends Controller
 {
+    public function __invoke()
+{
+    $total_productos = Producto::count();
+
+    $existencia_baja_count = Producto::where('existencia', '<', 10)->count();
+
+    return view('dashboard', compact(
+        'total_productos',
+        'existencia_baja_count'
+    ));
+}
     public function index()
     {
         //targetas resumen

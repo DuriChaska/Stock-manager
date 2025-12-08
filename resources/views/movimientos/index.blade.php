@@ -1,107 +1,110 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="flex w-full min-h-screen bg-gray-50">
-
-    {{-- SIDEBAR --}}
-    <aside class="w-64 min-h-screen p-6 bg-white shadow-md">
-
-        <div class="flex items-center gap-2 mb-10 text-xl font-semibold">
-            <img 
-                src="{{ asset('images/logo.png') }}" 
-                alt="Logo de Stock Managger" 
-                class="object-contain mt-10 w-28 h-28" 
-            >
-            STOCK MANAGER
-        </div>
-
-        <nav class="pt-10 space-y-4">
-            <a href="{{ route('dashboard') }}" 
-               class="flex items-center gap-2 text-gray-700 transition duration-150 hover:text-green-600"> 
-                <img src="{{ asset('images/dashboard_icon_221153.png') }}" class="w-6 h-6">
-                Dashboard
-            </a>
-
-            <a href="#" 
-               class="flex items-center gap-2 text-gray-700 transition duration-150 hover:text-green-600">
-                <img src="{{ asset('images/wondicon-ui-free-parcel_111208.png') }}" class="w-6 h-6">
-                Inventario
-            </a>
-
-            <a href="{{ route('movimientos.index') }}"
-                class="flex items-center gap-2 px-3 py-2 font-semibold text-green-900 transition duration-150 bg-green-200 rounded-md">
-                <img src="{{ asset('images/arrow_data_transfer_vertical_sync_icon_183025.png') }}"
-                    class="w-4 h-4">
-                Movimientos
-            </a>
-
-            <a href="#" class="flex items-center gap-2 text-gray-700 transition duration-150 hover:text-green-600">
-                <img src="{{ asset('images/graphical-business-presentation-on-a-screen_icon-icons.com_73240.png') }}" class="w-4 h-4"> 
-                Reportes
-            </a>
-
-            <a href="#" class="flex items-center gap-2 text-gray-700 transition duration-150 hover:text-green-600">
-                <img src="{{ asset('images/4105943-accounts-group-people-user-user-group-users_113923.png') }}" class="w-4 h-4">
-                Usuarios
-            </a>
-
-            <a href="#" class="flex items-center gap-2 text-gray-700 transition duration-150 hover:text-green-600">
-                <img src="{{ asset('images/descargar (5).png') }}" class="w-4 h-4">
-                Proveedores
-            </a>
-        </nav>
-    </aside>
-
-    {{-- CONTENIDO --}}
+<div class="p-6 space-y-6">
+    
     <main class="flex-1 p-8 md:p-10">
 
-        {{-- BUSCADOR Y USUARIO --}}
-        <div class="flex items-center justify-between w-full pb-6">
-            <div class="w-full md:w-1/3">
+        {{-- TÍTULO --}}
+        <h2 class="text-3xl font-bold text-gray-900">Movimientos de Inventario</h2>
+        <p class="mb-10 text-gray-600">Historial de entradas y salidas de productos</p>
+
+        {{-- ESTADÍSTICAS DE MOVIMIENTOS --}}
+        <div class="grid grid-cols-1 gap-4 mb-10 md:grid-cols-3">
+
+        {{-- Total de Entradas --}}
+        <div class="flex items-center justify-between p-5 transition bg-green-100 border border-green-200 shadow-sm hover:bg-green-200 rounded-2xl">
+            <div class="flex flex-col">
+                <p class="text-sm font-medium text-green-800">Total de entradas</p>
+                <p class="mt-1 text-3xl font-bold text-green-700">{{ $stats['entradas'] }}</p>
+                <small class="text-green-700">Unidades en todo el historial</small>
+            </div>
+            <img src="{{ asset('images/analytics_statistics_arrow_arriba_chart_graph_stock_icon_267146.png') }}" alt="Entradas Icon" class="w-12 h-12" />
+        </div>
+
+        {{-- Total de Salidas --}}
+        <div class="flex items-center justify-between p-5 transition bg-red-100 border border-red-200 shadow-sm hover:bg-red-200 rounded-2xl">
+            <div class="flex flex-col">
+                <p class="text-sm font-medium text-red-800">Total de salidas</p>
+                <p class="mt-1 text-3xl font-bold text-red-700">{{ $stats['salidas'] }}</p>
+                <small class="text-red-700">Unidades retiradas</small>
+            </div>
+            <img src="{{ asset('images/analytics_statistics_arrow_chart_graph_stock_icon_267146.png') }}" alt="Salidas Icon" class="w-12 h-12" />
+        </div>
+
+        {{-- Balance Neto --}}
+        <div class="flex items-center justify-between p-5 transition border border-green-200 shadow-sm bg-green-50 hover:bg-green-100 rounded-2xl">
+            <div class="flex flex-col">
+                <p class="text-sm font-medium text-green-800">Balance neto</p>
+                <p class="mt-1 text-3xl font-bold {{ $stats['balance'] >= 0 ? 'text-green-700' : 'text-red-700' }}">
+                    {{ $stats['balance'] >= 0 ? '+' : '' }}{{ $stats['balance'] }}
+                </p>
+                <small class="text-green-700">Diferencia entre entradas y salidas</small>
+            </div>
+            <img src="{{ asset('images/wondicon-ui-free-parcel_111208.png') }}" alt="Balance Icon" class="w-12 h-12" />
+        </div>
+
+        </div>
+
+        {{-- FILTROS Y BÚSQUEDA --}}
+        <div class="p-4 mb-8 bg-white shadow rounded-2xl">
+            <form method="GET" class="grid items-center w-full grid-cols-1 gap-4 md:grid-cols-3">
+
+                {{-- Buscador --}}
                 <div class="relative">
                     <svg class="absolute w-5 h-5 text-gray-400 left-3 top-2.5" fill="none" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                               d="m21 21-5.197-5.197A7.5 7.5 0 1 0 5.197 5.197 7.5 7.5 0 0 0 15.803 15.803Z" />
                     </svg>
-                    <input type="text"
-                        placeholder="Buscar"
-                        class="w-full py-2 pl-10 pr-4 transition duration-150 border border-gray-300 rounded-full focus:ring-2 focus:ring-green-400">
+                    <input type="text" name="search" value="{{ request('search') }}"
+                        placeholder="Buscar por nombre o marca"
+                        class="w-full py-2 pl-10 pr-4 border border-gray-300 rounded-full focus:ring-2 focus:ring-green-400">
                 </div>
-            </div>
 
-            <div class="flex items-center gap-4 md:gap-6">
-                <img src="{{ asset('images/notification_time_bell_alert_alarm_icon_220036.png') }}" class="w-6 h-6 cursor-pointer hover:opacity-75">
-                <img src="{{ asset('images/user_man_accept_21961.png') }}" class="w-8 h-8 cursor-pointer hover:opacity-75">
-            </div>
+                {{-- Filtro Marca --}}
+                <select name="marca" class="py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-green-400">
+                    <option value="">Todas las marcas</option>
+                    @foreach($marcas as $marca)
+                        <option value="{{ $marca->id }}" {{ request('marca') == $marca->id ? 'selected' : '' }}>
+                            {{ $marca->nombre }}
+                        </option>
+                    @endforeach
+                </select>
+
+                {{-- Filtro Stock --}}
+                <select name="tipo" class="py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-green-400">
+                    <option value="">Todo el stock</option>
+                    <option value="entrada" {{ request('tipo') == 'entrada' ? 'selected' : '' }}>Solo Entradas</option>
+                    <option value="salida" {{ request('tipo') == 'salida' ? 'selected' : '' }}>Solo Salidas</option>
+                </select>
+
+            </form>
         </div>
-        
-        {{-- TITULO --}}
-        <h2 class="mt-4 text-3xl font-bold text-gray-900">Movimientos de Inventario</h2>
-        <p class="mb-8 text-gray-600">Historial de entradas y salidas de productos</p>
+
 
         {{-- BOTONES --}}
         <div class="flex justify-end gap-4 mb-6">
             <a href="{{ route('movimientos.entrada') }}" 
-               class="flex items-center gap-2 px-4 py-2 font-semibold text-white bg-green-600 shadow-md rounded-xl hover:bg-green-700">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+               class="flex items-center gap-2 px-4 py-2 font-semibold text-white bg-[#97BB5C] shadow-md rounded-xl hover:bg-[#749646]">
+               
                 Agregar Entrada
             </a>
 
             <a href="{{ route('movimientos.salida') }}" 
                class="flex items-center gap-2 px-4 py-2 font-semibold text-red-700 bg-red-100 border border-red-300 shadow-md rounded-xl hover:bg-red-200">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
+
                 Agregar Salida
             </a>
         </div>
 
-        {{-- TABLA DE MOVIMIENTOS --}}
+        {{-- TABLA --}}
         <div class="p-6 bg-white border border-gray-200 shadow-lg rounded-xl">
             <h3 class="mb-6 text-2xl font-semibold text-gray-800">Historial de movimientos</h3>
 
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead>
-                        <tr class="text-xs font-semibold tracking-wider text-left text-gray-500 uppercase bg-gray-50">
+                <table class="w-full divide-y divide-gray-200">
+                    <thead class="text-xs font-semibold tracking-wider text-left text-gray-600 uppercase bg-gray-50">
+                        <tr>
                             <th class="px-6 py-3">Fecha</th>
                             <th class="px-6 py-3">Usuario</th>
                             <th class="px-6 py-3">Producto</th>
@@ -113,57 +116,37 @@
                     <tbody class="bg-white divide-y divide-gray-200">
 
                         @forelse ($movimientos as $mov)
-                            <tr class="hover:bg-gray-50">
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 text-sm text-gray-800">
+                                {{ $mov->created_at->format('d/m/Y H:i') }}
+                            </td>
 
-                                {{-- FECHA --}}
-                                <td class="px-6 py-4">
-                                    <p class="text-sm font-medium text-gray-900">
-                                        {{ $mov->created_at->format('Y-m-d') }}
-                                    </p>
-                                    <p class="text-xs text-gray-500">
-                                        {{ $mov->created_at->format('H:i') }}
-                                    </p>
-                                </td>
+                            <td class="px-6 py-4 text-sm text-gray-700">
+                                {{ $mov->usuario->name ?? '---' }}
+                            </td>
 
-                                {{-- USUARIO --}}
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center">
-                                        <span class="inline-flex items-center justify-center w-8 h-8 mr-3 text-sm font-semibold 
-                                            {{ $mov->tipo == 'entrada' ? 'text-green-800 bg-green-100' : 'text-red-800 bg-red-100' }} 
-                                            rounded-full">
-                                            {{ strtoupper(substr($mov->usuario->nombre, 0, 2)) }}
-                                        </span>
-                                        {{ $mov->usuario->nombre }}
-                                    </div>
-                                </td>
+                            <td class="px-6 py-4 text-sm text-gray-700">
+                                {{ $mov->producto->nombre }}
+                            </td>
 
-                                {{-- PRODUCTO --}}
-                                <td class="px-6 py-4 text-sm text-gray-700">
-                                    {{ $mov->producto->nombre }}
-                                </td>
+                            <td class="px-6 py-4">
+                                <span class="px-3 py-1 text-xs font-semibold rounded-full
+                                {{ $mov->tipo == 'entrada' ? 'text-green-800 bg-green-100' : 'text-red-800 bg-red-100' }}">
+                                    {{ ucfirst($mov->tipo) }}
+                                </span>
+                            </td>
 
-                                {{-- TIPO --}}
-                                <td class="px-6 py-4">
-                                    <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full
-                                        {{ $mov->tipo == 'entrada' ? 'text-green-800 bg-green-100' : 'text-red-800 bg-red-100' }}">
-                                        {{ ucfirst($mov->tipo) }}
-                                    </span>
-                                </td>
-
-                                {{-- CANTIDAD --}}
-                                <td class="px-6 py-4 font-semibold text-right
-                                    {{ $mov->tipo == 'entrada' ? 'text-green-600' : 'text-red-600' }}">
-                                    {{ $mov->tipo == 'entrada' ? '+' : '-' }}{{ $mov->cantidad }}
-                                </td>
-
-                            </tr>
-
+                            <td class="px-6 py-4 text-right font-semibold
+                            {{ $mov->tipo == 'entrada' ? 'text-green-600' : 'text-red-600' }}">
+                                {{ $mov->tipo == 'entrada' ? '+' : '-' }}{{ $mov->cantidad }}
+                            </td>
+                        </tr>
                         @empty
-                            <tr>
-                                <td colspan="5" class="py-6 text-center text-gray-500">
-                                    No hay movimientos registrados.
-                                </td>
-                            </tr>
+                        <tr>
+                            <td colspan="5" class="py-6 text-center text-gray-500">
+                                No hay movimientos registrados.
+                            </td>
+                        </tr>
                         @endforelse
 
                     </tbody>
@@ -172,5 +155,6 @@
         </div>
 
     </main>
+
 </div>
 @endsection
