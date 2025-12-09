@@ -42,9 +42,9 @@
 
 
                 <li>
-                    <a href="{{ route('productos.index') }}" 
+                    <a href="{{ route('inventario.index') }}" 
                        class="flex items-center gap-3 px-6 py-3 hover:bg-[#97BB5C] transition rounded-full
-                       {{ request()->routeIs('productos.*') ? 'bg-[#97BB5C]' : '' }}">
+                       {{ request()->routeIs('inventario.*') ? 'bg-[#97BB5C]' : '' }}">
                         <img src="/images/wondicon-ui-free-parcel_111208.png" class="w-5">
                         <span>Inventario</span>
                     </a>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Producto;
 use App\Models\Marca;
 use Illuminate\Http\Request;
+use App\Models\Proveedor;
 
 class InventarioController extends Controller
 {
@@ -18,9 +19,12 @@ class InventarioController extends Controller
     // Mostrar formulario crear
     public function create()
     {
+        $proveedores = Proveedor::all();
         $marcas = Marca::all();
-        return view('inventario.create', compact('marcas'));
+
+        return view('inventario.create', compact('proveedores', 'marcas'));
     }
+
 
     // Guardar producto
     public function store(Request $request)
