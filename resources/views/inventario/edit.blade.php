@@ -1,49 +1,78 @@
 @extends('layouts.app')
 
+@section('title', 'Editar Producto')
+
 @section('content')
-<div class="container mx-auto max-w-lg bg-white shadow-lg p-6 rounded">
 
-    <h1 class="text-2xl font-bold mb-6">Editar Producto</h1>
+<h1 class="mb-4 text-3xl font-bold">Editar Producto</h1>
 
-    <form action="{{ route('inventario.update', $producto->id) }}" method="POST">
+<div class="p-8 bg-white shadow-xl rounded-xl">
+
+    <form action="{{ route('inventario.update', $producto->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
+        <!-- Nombre -->
         <label class="block mb-2 font-semibold">Nombre:</label>
-        <input type="text" name="nombre" 
-               value="{{ $producto->nombre }}" 
-               class="w-full border px-3 py-2 rounded mb-4" required>
+        <input type="text" name="nombre" value="{{ $producto->nombre }}"
+               class="w-full px-3 py-2 mb-4 border rounded" required>
 
+        <!-- Marca -->
         <label class="block mb-2 font-semibold">Marca:</label>
-        <select name="marca_id" class="w-full border px-3 py-2 rounded mb-4" required>
-            @foreach ($marcas as $m)
-                <option value="{{ $m->id }}" 
-                        {{ $producto->marca_id == $m->id ? 'selected' : '' }}>
-                    {{ $m->nombre }}
+        <select name="marca_id" class="w-full px-3 py-2 mb-4 border rounded" required>
+            @foreach ($marcas as $marca)
+                <option value="{{ $marca->id }}"
+                    {{ $producto->marca_id == $marca->id ? 'selected' : '' }}>
+                    {{ $marca->nombre }}
                 </option>
             @endforeach
         </select>
 
-        <label class="block mb-2 font-semibold">Talla:</label>
-        <input type="text" name="talla" value="{{ $producto->talla }}"
-               class="w-full border px-3 py-2 rounded mb-4">
+        <!-- Talla opcional -->
+        <label class="block mb-2 font-semibold">¿Usa talla?</label>
+        <input type="checkbox" id="toggleTalla" onchange="mostrarTalla()"
+               {{ $producto->talla ? 'checked' : '' }}>
 
-        <label class="block mb-2 font-semibold">Existencia:</label>
-        <input type="number" name="existencia" value="{{ $producto->existencia }}"
-               class="w-full border px-3 py-2 rounded mb-4" required>
-
-        <label class="block mb-2 font-semibold">Precio:</label>
-        <input type="number" step="0.01" name="precio" value="{{ $producto->precio }}"
-               class="w-full border px-3 py-2 rounded mb-4" required>
-
-        <div class="flex justify-between mt-4">
-            <a href="{{ route('inventario.index') }}" class="px-4 py-2 bg-gray-500 text-white rounded">Cancelar</a>
-
-            <button class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white rounded">
-                Actualizar
-            </button>
+        <div id="campoTalla" class="{{ $producto->talla ? '' : 'hidden' }} mt-3">
+            <label class="block mb-1 font-medium">Talla (opcional)</label>
+            <input type="text" name="talla" value="{{ $producto->talla }}"
+                   class="w-full px-3 py-2 border rounded">
         </div>
 
+        <!-- Existencia -->
+        <label class="block mt-4 mb-2 font-semibold">Existencia:</label>
+        <input type="number" name="existencia" value="{{ $producto->existencia }}"
+               class="w-full px-3 py-2 mb-4 border rounded" required>
+
+        <!-- Precio -->
+        <label class="block mb-2 font-semibold">Precio:</label>
+        <input type="number" step="0.01" name="precio" value="{{ $producto->precio }}"
+               class="w-full px-3 py-2 mb-4 border rounded" required>
+
+        <!-- Imagen -->
+        <label class="block mb-2 font-semibold">Imagen actual:</label>
+        @if ($producto->imagen)
+            <img src="{{ asset('storage/' . $producto->imagen) }}" class="w-32 mb-4 rounded">
+        @else
+            <p class="text-gray-500">Sin imagen</p>
+        @endif
+
+        <label class="block mt-4 mb-2 font-semibold">Subir nueva imagen:</label>
+        <input type="file" name="imagen" class="w-full px-3 py-2 mb-6 border rounded">
+
+        <button class="px-6 py-2 text-white bg-green-600 rounded hover:bg-green-700">
+            Actualizar Producto
+        </button>
+
     </form>
+
 </div>
+
 @endsection
+
+<script>
+function mostrarTalla() {
+    document.getElementById('campoTalla')
+        .classList.toggle('hidden', !document.getElementById('toggleTalla').checked);
+}
+</script>

@@ -2,34 +2,40 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
+use Illuminate\Database\Eloquent\Model;
 
 class Producto extends Model
 {
     use HasFactory;
+
     
-    protected $table = 'productos'; 
 
     protected $fillable = [
         'nombre',
         'marca_id',
-        'talla',
-        'existencia',
+        'proveedor_id',
         'precio',
+        'existencia',
+        'imagen'
     ];
 
-   
-    public function marca(): BelongsTo
+    // 🔗 Marca
+    public function marca()
     {
-        
+
         return $this->belongsTo(Marca::class);
     }
 
+    // 🔗 Proveedor
+    public function proveedor()
+    {
+        return $this->belongsTo(Proveedor::class);
+    }
+
+    // 🔗 Movimientos del producto (entradas / salidas)
     public function movimientos()
     {
-        return $this->hasMany(Movimiento::class);
+        return $this->hasMany(Movimiento::class, 'producto_id');
     }
 }

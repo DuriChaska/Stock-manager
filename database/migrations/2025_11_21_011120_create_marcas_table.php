@@ -9,14 +9,18 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('marcas', function (Blueprint $table) {
-        $table->id();
-        $table->string('nombre'); 
-        $table->timestamps();
+            $table->id();
+            $table->string('nombre');
+            $table->unsignedBigInteger('proveedor_id')->nullable();
+            $table->timestamps();
+
+            $table->foreign('proveedor_id')->references('id')->on('proveedores')->onDelete('cascade');
         });
     }
+
 
 
     /**
