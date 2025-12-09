@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProveedorController;
-use App\Http\Controllers\UserController; 
-use App\Http\Controllers\ReportController; 
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\MovimientosController;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,7 +22,7 @@ Route::get('/', function () {
 
 
 // ---------------------------------------------------------------------
-// Dashboard principal (SIEMPRE USANDO index())
+// Dashboard principal
 // ---------------------------------------------------------------------
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
@@ -31,13 +32,17 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 // ---------------------------------------------------------------------
 // Rutas protegidas por autenticación
 // ---------------------------------------------------------------------
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth'])->group(function () {
 
-
+    // -------------------------------------------------------
+    // NOTIFICACIONES
+    // -------------------------------------------------------
     Route::get('/notificaciones/leer', function () {
         Auth::user()->unreadNotifications->markAsRead();
         return response()->json(['ok' => true]);
     })->name('notificaciones.leer');
+
+
     // -------------------------------------------------------
     // PERFIL
     // -------------------------------------------------------
@@ -47,7 +52,7 @@ Route::middleware('auth')->group(function () {
 
 
     // -------------------------------------------------------
-    // INVENTARIO (MÓDULO PRINCIPAL)
+    // INVENTARIO
     // -------------------------------------------------------
     Route::get('/inventario',               [InventarioController::class, 'index'])->name('inventario.index');
     Route::get('/inventario/create',        [InventarioController::class, 'create'])->name('inventario.create');
@@ -55,10 +60,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/inventario/{id}/edit',     [InventarioController::class, 'edit'])->name('inventario.edit');
     Route::put('/inventario/{id}',          [InventarioController::class, 'update'])->name('inventario.update');
     Route::delete('/inventario/{id}',       [InventarioController::class, 'destroy'])->name('inventario.destroy');
+    Route::get('/inventario/{id}',          [InventarioController::class, 'show'])->name('inventario.show');
 
 
     // -------------------------------------------------------
-    // REDIRECCIÓN DEL MÓDULO PRODUCTOS (VIEJO) → INVENTARIO
+    // REDIRECCIÓN DE PRODUCTOS A INVENTARIO
     // -------------------------------------------------------
     Route::get('/productos', function () {
         return redirect()->route('inventario.index');
@@ -88,7 +94,7 @@ Route::middleware('auth')->group(function () {
 
 
     // -------------------------------------------------------
-    // MOVIMIENTOS (ENTRADAS / SALIDAS)
+    // MOVIMIENTOS (YA SIN RESOURCE)
     // -------------------------------------------------------
     Route::get('/movimientos',          [MovimientosController::class, 'index'])->name('movimientos.index');
     Route::get('/movimientos/entrada',  [MovimientosController::class, 'entrada'])->name('movimientos.entrada');
@@ -106,6 +112,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/ventas/hoy', function () {
         return redirect()->route('movimientos.index', ['fecha' => today()]);
     })->name('ventas.hoy');
+
+
+    // -------------------------------------------------------
+    // MARCAS AJAX
+    // -------------------------------------------------------
+    Route::post('/marcas/store-ajax', function (Request $request) {
+        $marca = \App\Models\Marca::create([
+            'nombre' => $request->nombre,
+        ]);
+
+        return response()->json($marca);
+    });
 
 });
 

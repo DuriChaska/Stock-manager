@@ -3,29 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Models\Producto;
-use App\Models\Marca;
-use Illuminate\Http\Request;
+
 use App\Models\Proveedor;
 use App\Models\User;
+use Illuminate\Http\Request;
 use App\Notifications\StockBajoNotification;
+use App\Models\Marca;
+
 
 class InventarioController extends Controller
 {
-    // Mostrar listado del inventario
+    // Mostrar inventario
     public function index()
     {
-        $productos = Producto::with('marca')->get();
+        $productos = Producto::with('proveedor')->get();
         return view('inventario.index', compact('productos'));
     }
 
-    // Mostrar formulario crear
-    public function create()
+    // Formulario crear
+   public function create()
     {
         $proveedores = Proveedor::all();
-        $marcas = Marca::all();
+        $marcas = Marca::all(); // YA EXISTE
 
         return view('inventario.create', compact('proveedores', 'marcas'));
     }
+
 
 
 
@@ -33,16 +36,23 @@ class InventarioController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre'     => 'required',
-            'marca_id'   => 'required',
-            'talla'      => 'nullable',
-            'existencia' => 'required|integer|min:0',
-            'precio'     => 'required|numeric|min:0'
+            'nombre'       => 'required|string|max:255',
+            'precio'       => 'required|numeric|min:0',
+            'existencia'   => 'required|integer|min:0',
+            'proveedor_id' => 'required|exists:proveedores,id',
+            'imagen'       => 'nullable|image|max:2048'
         ]);
 
-        $producto = Producto::create($request->all());
+        $data = $request->all();
 
-        // 🔔 Notificación por stock bajo
+        // Guardar imagen si existe
+        if ($request->hasFile('imagen')) {
+            $data['imagen'] = $request->file('imagen')->store('productos', 'public');
+        }
+
+        $producto = Producto::create($data);
+
+        // Notificar por stock bajo
         if ($producto->existencia < 10) {
             foreach (User::where('role_id', 1)->get() as $admin) {
                 $admin->notify(new StockBajoNotification($producto));
@@ -53,25 +63,24 @@ class InventarioController extends Controller
             ->with('success', 'Producto registrado correctamente.');
     }
 
-
-    // Mostrar formulario de edición
+    // Editar
     public function edit($id)
     {
         $producto = Producto::findOrFail($id);
         $marcas = Marca::all();
+        $proveedores = Proveedor::all();
 
-        return view('inventario.edit', compact('producto', 'marcas'));
+        return view('inventario.edit', compact('producto', 'marcas', 'proveedores'));
     }
 
-    // Actualizar producto
+    // Actualizar
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nombre' => 'required',
-            'marca_id' => 'required',
-            'talla' => 'nullable',
-            'existencia' => 'required|integer|min:0',
-            'precio' => 'required|numeric|min:0',
+            'nombre'       => 'required|string|max:255',
+            'precio'       => 'required|numeric|min:0',
+            'existencia'   => 'required|integer|min:0',
+            'proveedor_id' => 'required|exists:proveedores,id',
         ]);
 
         $producto = Producto::findOrFail($id);
@@ -81,7 +90,7 @@ class InventarioController extends Controller
             ->with('success', 'Producto actualizado correctamente.');
     }
 
-    // Eliminar producto
+    // Eliminar
     public function destroy($id)
     {
         $producto = Producto::findOrFail($id);
@@ -90,7 +99,15 @@ class InventarioController extends Controller
         return redirect()->route('inventario.index')
             ->with('success', 'Producto eliminado correctamente.');
     }
+
+    public function show($id)
+    {
+        $producto = Producto::with(['marca', 'proveedor'])->findOrFail($id);
+
+        return view('inventario.show', compact('producto'));
+    }
 }
+
 
 
 

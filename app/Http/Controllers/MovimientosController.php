@@ -7,9 +7,16 @@ use App\Models\Producto;
 use App\Models\Proveedor;
 use App\Models\Marca;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class MovimientosController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /* ====== LISTADO PRINCIPAL ====== */
     public function index()
     {
@@ -77,7 +84,7 @@ class MovimientosController extends Controller
 
         // Guardar movimiento
         Movimiento::create([
-            'usuario_id'   => auth()->id() ?? 1,
+            'usuario_id' => auth()->id(),
             'producto_id'  => $data['producto_id'],
             'proveedor_id' => $data['proveedor_id'] ?? null,
             'tipo'         => $data['tipo'],
@@ -86,6 +93,10 @@ class MovimientosController extends Controller
 
             'fecha'        => $data['fecha'],
         ]);
+
+        
+
+
 
         return redirect()->route('movimientos.index')->with('success', 'Movimiento registrado correctamente.');
     }

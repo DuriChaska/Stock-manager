@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('movimientos', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('usuario_id')->constrained('users')->cascadeOnDelete();
+        $table->foreignId('usuario_id')->constrained('users');
         $table->foreignId('producto_id')->constrained('productos')->onDelete('cascade'); 
-        $table->foreignId('proveedor_id')->constrained('proveedores')->onDelete('cascade');
+        $table->foreignId('proveedor_id')->nullable()->constrained('proveedores')->onDelete('cascade');
         
         $table->enum('tipo', ['entrada', 'salida']); 
         $table->integer('cantidad');
