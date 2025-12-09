@@ -10,23 +10,14 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function __invoke()
-{
-    $total_productos = Producto::count();
-
-    $existencia_baja_count = Producto::where('existencia', '<', 10)->count();
-
-    return view('dashboard', compact(
-        'total_productos',
-        'existencia_baja_count'
-    ));
-}
+    
     public function index()
     {
-        //targetas resumen
-        $total_productos = Producto::sum('existencia');
+        // Tarjetas resumen
+        $total_productos = Producto::sum('existencia'); // total stock sumado
         $existencia_baja_count = Producto::where('existencia', '<', 10)->count();
 
+        // Movimientos del día
         $movimientos_hoy = Movimiento::where('tipo', 'salida')
             ->whereDate('fecha', today())
             ->get();
@@ -34,7 +25,7 @@ class DashboardController extends Controller
         $ventas_hoy = $movimientos_hoy->sum('cantidad');
         $ingresos_hoy = $movimientos_hoy->sum('costo');
 
-        //grafica barras ventas semanales
+        // Gráfica barras (ventas semanales)
         $dias = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
         $weekly_sales_data = [];
 
@@ -44,12 +35,12 @@ class DashboardController extends Controller
                 ->sum('cantidad');
         }
 
-        //grafica dona marcas
+        // Gráfica dona (existencia por marca)
         $brand_distribution = Marca::withSum('productos as total_stock', 'existencia')->get();
         $brand_distribution_labels = $brand_distribution->pluck('nombre')->toArray();
         $brand_distribution_data = $brand_distribution->pluck('total_stock')->toArray();
 
-        //5 productos más vendidos
+        // Top 5 productos más vendidos del mes
         $top_products = Producto::select('productos.*')
             ->join('movimientos', 'productos.id', '=', 'movimientos.producto_id')
             ->where('movimientos.tipo', 'salida')

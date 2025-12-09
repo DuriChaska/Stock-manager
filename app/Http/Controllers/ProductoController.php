@@ -11,19 +11,19 @@ class ProductoController extends Controller
     public function index()
     {
   
-        return view('productos.index'); 
+        return view('inventario.index'); 
     }
 
     public function create()
     {
     
-        return view('productos.create');
+        return view('inventario.create');
     }
 
     
     public function store(Request $request)
     {
 
-        return redirect()->route('productos.index')->with('status', 'Producto creado (simulado) exitosamente.');
+        return redirect()->route('inventario.index')->with('status', 'Producto creado (simulado) exitosamente.');
     }
 }

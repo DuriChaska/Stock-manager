@@ -46,104 +46,117 @@
 </div>
 
 <!-- Tabla de productos -->
-<div class="p-6 bg-white shadow-xl rounded-xl">
+<div class="p-6 bg-white shadow-xl rounded-2xl">
 
-    <h2 class="mb-5 text-xl font-semibold">
-        Productos ({{ count($productos) }})
-    </h2>
+    <h2 class="mb-6 text-2xl font-semibold">Productos ({{ count($productos) }})</h2>
 
-    <table class="w-full text-left">
+    <table class="w-full table-auto">
+
+        
         <thead>
             <tr class="text-gray-700 border-b">
-                <th class="py-3">Producto</th>
-                <th>Marca</th>
-                <th>Talla</th>
-                <th>Stock</th>
-                <th>Precio</th>
-                <th class="text-center">Acciones</th>
+                <th class="pb-3 text-left">Producto</th>
+                <th class="pb-3 text-left">Marca</th>
+                <th class="pb-3 text-left">Talla</th>
+                <th class="pb-3 text-left">Stock</th>
+                <th class="pb-3 text-left">Precio</th>
+                <th class="pb-3 text-center">Acciones</th>
             </tr>
         </thead>
 
         <tbody>
-            @forelse ($productos as $p)
-            <tr class="transition border-b hover:bg-gray-100">
+            @foreach ($productos as $p)
+                <tr class="transition border-b hover:bg-gray-100">
+                    
+                    <!-- Producto -->
+                    <td class="flex items-center gap-4 py-4">
+                        <img src="{{ $p->imagen ? asset('storage/'.$p->imagen) : '/img/default.jpg' }}"
+                            class="object-cover shadow-md w-14 h-14 rounded-xl">
 
-                <td class="flex items-center gap-3 py-4">
-                    <img 
-                        src="{{ $p->imagen ?? 'https://via.placeholder.com/50' }}" 
-                        class="object-cover w-12 h-12 rounded-md shadow-sm"
-                    >
-                    <span class="font-medium">{{ $p->nombre }}</span>
-                </td>
-
-                <td>
-                    <span class="px-3 py-1 text-sm bg-gray-200 rounded-full">
-                        {{ $p->marca }}
-                    </span>
-                </td>
-
-                <td>{{ $p->talla }}</td>
-
-                <td>
-                    @if ($p->stock >= 20)
-                        <span class="px-3 py-1 text-sm text-green-800 bg-green-200 rounded-full">
-                            Alto Stock
+                        <span class="text-lg font-semibold text-gray-800">
+                            {{ $p->nombre }}
                         </span>
-                    @elseif ($p->stock >= 10)
-                        <span class="px-3 py-1 text-sm text-yellow-800 bg-yellow-200 rounded-full">
-                            Stock Medio
+                    </td>
+
+                    <!-- Marca -->
+                    <td>
+                        <span class="px-4 py-1 text-sm font-medium bg-gray-200 rounded-full shadow-sm">
+                            {{ $p->marca->nombre ?? 'Sin marca' }}
                         </span>
-                    @else
-                        <span class="px-3 py-1 text-sm text-red-800 bg-red-200 rounded-full">
-                            Bajo Stock
-                        </span>
-                    @endif
-                </td>
+                    </td>
 
-                <td class="font-medium">${{ number_format($p->precio, 2) }}</td>
+                    <!-- Talla -->
+                    <td class="font-medium text-gray-700">
+                        {{ $p->talla }}
+                    </td>
 
-                <td>
-                    <div class="flex justify-center gap-4 text-xl">
+                    <!-- Existencia -->
+                    <td>
+                        @if ($p->existencia >= 20)
+                            <span class="px-4 py-1 text-sm text-green-900 bg-green-200 rounded-full shadow-sm">
+                                Alto Stock
+                            </span>
+                        @elseif ($p->existencia >= 10)
+                            <span class="px-4 py-1 text-sm text-yellow-900 bg-yellow-200 rounded-full shadow-sm">
+                                Stock Medio
+                            </span>
+                        @else
+                            <span class="px-4 py-1 text-sm text-red-900 bg-red-200 rounded-full shadow-sm">
+                                Bajo Stock
+                            </span>
+                        @endif
+                    </td>
 
-                        <a href="{{ route('inventario.show', $p->id) }}" 
-                           class="text-gray-600 hover:text-black"
-                           title="Ver">
-                            <i class="fa-regular fa-eye"></i>
-                        </a>
+                    <!-- Precio -->
+                    <td class="text-lg font-semibold text-gray-800">
+                        ${{ number_format($p->precio, 2) }}
+                    </td>
 
-                        <a href="{{ route('inventario.edit', $p->id) }}" 
-                           class="text-green-600 hover:text-green-800"
-                           title="Editar">
-                            <i class="fa-regular fa-pen-to-square"></i>
-                        </a>
+                    <!-- Acciones -->
+                    <td class="text-center">
+                        <div class="flex items-center justify-center gap-4">
 
-                        <form action="{{ route('inventario.destroy', $p->id) }}" 
-                              method="POST"
-                              onsubmit="return confirm('¿Eliminar producto?')">
-                            @csrf
-                            @method('DELETE')
-                            <button class="text-red-600 hover:text-red-800" title="Eliminar">
-                                <i class="fa-regular fa-trash-can"></i>
-                            </button>
-                        </form>
+                            <!-- VER -->
+                            <a href="{{ route('inventario.show', $p->id) }}"
+                            title="Ver">
+                                <img src="/images/eye_visible_hide_hidden_show_icon_145988.png" 
+                                    class="transition-transform cursor-pointer w-7 h-7 hover:scale-110">
+                            </a>
 
-                    </div>
-                </td>
+                            <!-- EDITAR -->
+                            <a href="{{ route('inventario.edit', $p->id) }}"
+                            title="Editar">
+                                <img src="/images/creative_design_draw_illustration_pen_pencil_write_icon_123895.png" 
+                                    class="transition-transform cursor-pointer w-7 h-7 hover:scale-110">
+                            </a>
 
-            </tr>
+                            <!-- ELIMINAR -->
+                            <form action="{{ route('inventario.destroy', $p->id) }}" 
+                                method="POST"
+                                onsubmit="return confirm('¿Eliminar producto?')">
+                                @csrf
+                                @method('DELETE')
 
-            @empty
-            <tr>
-                <td colspan="6" class="py-4 text-center text-gray-500">
-                    No hay productos registrados.
-                </td>
-            </tr>
-            @endforelse
-        </tbody>
+                                <button type="submit" title="Eliminar">
+                                    <img src="/images/1485477104-basket_78591.png" 
+                                        class="transition-transform cursor-pointer w-7 h-7 hover:scale-110">
+                                </button>
+                            </form>
+
+                        </div>
+                    </td>
+
+
+                    
+                </tr>
+            @endforeach
+            </tbody>
+
 
     </table>
-
+    
 </div>
+
 
 @endsection
 

@@ -17,11 +17,11 @@
     <form action="{{ route('inventario.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
-        <div class="grid grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 
             <!-- Nombre -->
             <div>
-                <label class="font-medium">Nombre del producto *</label>
+                <label class="block mb-1 font-medium">Nombre del producto *</label>
                 <input type="text" name="nombre"
                        class="w-full px-4 py-2 border shadow-inner rounded-xl focus:ring-2 focus:ring-green-400 focus:border-green-500"
                        required>
@@ -31,13 +31,15 @@
             <div>
                 <label class="font-medium">Proveedor *</label>
                 <select name="marca"
-                        class="w-full px-4 py-2 border shadow-inner rounded-xl focus:ring-2 focus:ring-green-400 focus:border-green-500"
-                        required>
-                    <option value="">Seleccione marca</option>
-                    @foreach ($proveedores as $prov)
-                        <option value="{{ $prov->nombre }}">{{ $prov->nombre }}</option>
+                    class="w-full px-4 py-2 border shadow-inner rounded-xl focus:ring-2 focus:ring-green-400 focus:border-green-500"
+                    required>
+                <option value="">Seleccione marca</option>
+
+                    @foreach ($marcas as $marca)
+                        <option value="{{ $marca->nombre }}">{{ $marca->nombre }}</option>
                     @endforeach
                 </select>
+
             </div>
 
             <!-- Precio -->

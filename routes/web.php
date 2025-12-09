@@ -1,96 +1,98 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+
+
+use Illuminate\Support\Facades\Route;
+
+
+
 use App\Http\Controllers\InventarioController;
-use Illuminate\Support\Facades\Route;
-
-// Redirigir a login
-use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProductoController;
+
 use App\Http\Controllers\ProveedorController;
-use App\Http\Controllers\MovimientosController;
+
 use App\Http\Controllers\UserController; 
 use App\Http\Controllers\ReportController; 
+use App\Http\Controllers\MovimientosController;
 
 
+// ---------------------------------------------------------------------
+// Redirigir raíz a login
+// ---------------------------------------------------------------------
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
-// Dashboard
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
-// Rutas protegidas por login
+// ---------------------------------------------------------------------
+// Dashboard principal
+// ---------------------------------------------------------------------
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
+
+
+
+// ---------------------------------------------------------------------
+// Rutas protegidas por autenticación
+// ---------------------------------------------------------------------
 Route::middleware('auth')->group(function () {
 
-    // Perfil
+    // -------------------------------------------------------
+    // PERFIL
+    // -------------------------------------------------------
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // INVENTARIO
-    Route::get('/inventario', [InventarioController::class, 'index'])->name('inventario.index');
-    Route::get('/inventario/create', [InventarioController::class, 'create'])->name('inventario.create');
-    Route::post('/inventario/store', [InventarioController::class, 'store'])->name('inventario.store');
-    Route::get('/inventario/{id}/edit', [InventarioController::class, 'edit'])->name('inventario.edit');
-    Route::put('/inventario/{id}', [InventarioController::class, 'update'])->name('inventario.update');
-    Route::delete('/inventario/{id}', [InventarioController::class, 'destroy'])->name('inventario.destroy');
+    // -------------------------------------------------------
+    // INVENTARIO (MODULO REAL)
+    // -------------------------------------------------------
+    Route::get('/inventario',               [InventarioController::class, 'index'])->name('inventario.index');
+    Route::get('/inventario/create',        [InventarioController::class, 'create'])->name('inventario.create');
+    Route::post('/inventario/store',        [InventarioController::class, 'store'])->name('inventario.store');
+    Route::get('/inventario/{id}/edit',     [InventarioController::class, 'edit'])->name('inventario.edit');
+    Route::put('/inventario/{id}',          [InventarioController::class, 'update'])->name('inventario.update');
+    Route::delete('/inventario/{id}',       [InventarioController::class, 'destroy'])->name('inventario.destroy');
 
-});
+    // 🔥 Redirección desde /productos → /inventario (para evitar errores)
+    Route::get('/productos', function () {
+        return redirect()->route('inventario.index');
+    });
 
-require __DIR__.'/auth.php';
+    // -------------------------------------------------------
+    // PROVEEDORES
+    // -------------------------------------------------------
+    Route::resource('proveedores', ProveedorController::class);
 
-
-require __DIR__.'/auth.php';
-
-
-
-    Route::middleware(['auth', 'verified'])->group(function () {
-
-
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        Route::resource('productos', ProductoController::class);
-        Route::resource('proveedores', ProveedorController::class);
+    // -------------------------------------------------------
+    // USUARIOS
+    // -------------------------------------------------------
     Route::resource('usuarios', UserController::class);
 
+    // -------------------------------------------------------
+    // REPORTES
+    // -------------------------------------------------------
+    Route::get('reportes',                         [ReportController::class, 'index'])->name('reportes.index');
+    Route::get('reportes/ventas-ingresos',         [ReportController::class, 'ventasIngresos'])->name('reportes.ventas-ingresos');
+    Route::get('reportes/ventas-marca',            [ReportController::class, 'ventasPorMarca'])->name('reportes.ventas-marca');
+    Route::get('reportes/productos-mas-vendidos',  [ReportController::class, 'productosMasVendidos'])->name('reportes.productos-mas-vendidos');
+    Route::get('reportes/evolucion-inventario',    [ReportController::class, 'evolucionInventario'])->name('reportes.evolucion-inventario');
 
-    // -------------------------
-    // REPORTES (Alexis)
-    // -------------------------
-    Route::get('reportes', [ReportController::class, 'index'])->name('reportes.index');
-    Route::get('reportes/ventas-ingresos', [ReportController::class, 'ventasIngresos'])->name('reportes.ventas-ingresos');
-    Route::get('reportes/ventas-marca', [ReportController::class, 'ventasPorMarca'])->name('reportes.ventas-marca');
-    Route::get('reportes/productos-mas-vendidos', [ReportController::class, 'productosMasVendidos'])->name('reportes.productos-mas-vendidos');
-    Route::get('reportes/evolucion-inventario', [ReportController::class, 'evolucionInventario'])->name('reportes.evolucion-inventario');
+    // -------------------------------------------------------
+    // MOVIMIENTOS (ENTRADAS / SALIDAS)
+    // -------------------------------------------------------
+    Route::get('/movimientos',          [MovimientosController::class, 'index'])->name('movimientos.index');
+    Route::get('/movimientos/entrada',  [MovimientosController::class, 'entrada'])->name('movimientos.entrada');
+    Route::post('/movimientos/store',   [MovimientosController::class, 'store'])->name('movimientos.store');
+    Route::get('/movimientos/salida',   [MovimientosController::class, 'salida'])->name('movimientos.salida');
 
-
-    // -------------------------
-    // Perfil
-    // -------------------------
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-
-    // -------------------------
-    // Movimientos personalizados
-    // -------------------------
-    Route::get('/movimientos', [MovimientosController::class, 'index'])->name('movimientos.index');
-    Route::get('/movimientos/entrada', [MovimientosController::class, 'entrada'])->name('movimientos.entrada');
-    Route::post('/movimientos/store', [MovimientosController::class, 'store'])->name('movimientos.store');
-    Route::get('/movimientos/salida', [MovimientosController::class, 'salida'])->name('movimientos.salida');
-
-
-    // -------------------------
-    // Filtros
-    // -------------------------
+    // -------------------------------------------------------
+    // FILTROS
+    // -------------------------------------------------------
     Route::get('/productos/stock-bajo', function () {
-        return redirect()->route('productos.index', ['filtro' => 'stock_bajo']);
+        return redirect()->route('inventario.index', ['filtro' => 'stock_bajo']);
     })->name('stock.bajo');
 
     Route::get('/ventas/hoy', function () {
@@ -98,3 +100,7 @@ require __DIR__.'/auth.php';
     })->name('ventas.hoy');
 
 });
+
+
+// ---------------------------------------------------------------------
+require __DIR__.'/auth.php';
