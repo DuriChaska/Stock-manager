@@ -51,7 +51,7 @@ class ReportController extends Controller
         $baseMovimientos = Movimiento::where('tipo', 'salida');
 
         //metricas principales
-        // ventas totales = suma de cantidades vendidas (opción 1-B)
+        // ventas totales
         $ventasTotales = (clone $baseMovimientos)
             ->whereBetween('fecha', [$currentStart, $currentEnd])
             ->sum('cantidad');
@@ -60,7 +60,7 @@ class ReportController extends Controller
             ->whereBetween('fecha', [$previousStart, $previousEnd])
             ->sum('cantidad');
 
-        // ingresos = SUM(cantidad * precio_producto) (no usamos campo costo, opción 2-NO)
+        // ingresos = SUM(cantidad * precio_producto)
         $ingresosTotales = (clone $baseMovimientos)
             ->whereBetween('fecha', [$currentStart, $currentEnd])
             ->join('productos', 'movimientos.producto_id', '=', 'productos.id')
@@ -73,14 +73,14 @@ class ReportController extends Controller
             ->selectRaw('SUM(movimientos.cantidad * productos.precio) as total')
             ->value('total') ?? 0;
 
-        // ticket promedio = ingresos / cantidad vendida (opción 3-B)
+        // ticket promedio = ingresos / cantidad vendida 
         $ticketPromedio = $ventasTotales > 0 ? $ingresosTotales / $ventasTotales : 0;
         $ticketPrevio   = $ventasPrevias > 0 ? $ingresosPrevios / $ventasPrevias : 0;
 
         // Stock total
         $stockTotal = Producto::sum('existencia');
 
-        // rotacion de stock = ventas del periodo / stock promedio (opción 4-Sí)
+        // rotacion de stock = ventas del periodo / stock promedio
         $stockPromedio = Producto::avg('existencia') ?: 1;
         $rotacionStock = $ventasTotales / $stockPromedio;
         $rotacionPrev  = $ventasPrevias / $stockPromedio;

@@ -18,12 +18,12 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
 
-            // 🔹 relación con roles
+            //relación con roles
             $table->foreignId('role_id')
                   ->constrained('roles')
                   ->cascadeOnDelete();
 
-            // 🔹 último acceso real
+            // último acceso real
             $table->timestamp('last_login_at')->nullable();
 
             $table->timestamps();

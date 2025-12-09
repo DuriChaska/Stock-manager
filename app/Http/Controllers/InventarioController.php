@@ -54,7 +54,7 @@ class InventarioController extends Controller
         // crear producto
         $producto = Producto::create($data);
 
-        // enviar notificación si el producto queda con stock bajo
+        // enviar notificacion si el producto queda con stock bajo
         if ($producto->existencia < 10) {
             foreach (User::where('role_id', 1)->get() as $admin) {
                 $admin->notify(new StockBajoNotification($producto));
@@ -78,7 +78,7 @@ class InventarioController extends Controller
     // actualizar producto
     public function update(Request $request, $id)
     {
-        // validar datos enviados por el usuario
+        // validar datos
         $request->validate([
             'nombre'       => 'required|string|max:255',
             'precio'       => 'required|numeric|min:0',
@@ -94,10 +94,10 @@ class InventarioController extends Controller
         // obtener todos los datos
         $data = $request->all();
 
-        // si el usuario subió nueva imagen, la guardo
+        // subir y guardar imagen
         if ($request->hasFile('imagen')) {
 
-            // si ya tenía imagen, la elimino del storage
+            // si ya tenia imagen, la elimino 
             if ($producto->imagen) {
                 Storage::disk('public')->delete($producto->imagen);
             }
@@ -106,7 +106,7 @@ class InventarioController extends Controller
             $data['imagen'] = $request->file('imagen')->store('productos', 'public');
         }
 
-        // si no está usando talla, eliminar valor
+        // si no esta usando talla, eliminar valor
         if (!$request->has('talla') || $request->talla == null) {
             $data['talla'] = null;
         }

@@ -40,7 +40,7 @@ class DashboardController extends Controller
         $brand_distribution_labels = $brand_distribution->pluck('nombre')->toArray();
         $brand_distribution_data = $brand_distribution->pluck('total_stock')->toArray();
 
-        //productos mas vendidos mes
+        //productos mas vendidos del mes
         $top_products = Producto::select('productos.*')
             ->join('movimientos', 'productos.id', '=', 'movimientos.producto_id')
             ->where('movimientos.tipo', 'salida')
