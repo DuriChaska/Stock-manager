@@ -28,23 +28,29 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+{
+    // Validación del registro
+    $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users'],
+        'password' => ['required', 'confirmed', Rules\Password::defaults()],
+    ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+    // Crear usuario con rol por defecto = 1 (usuario normal)
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'role_id' => 1, // 👈 rol por defecto
+    ]);
 
-        event(new Registered($user));
+    // Registrar evento de registro
+    event(new Registered($user));
 
-        Auth::login($user);
+    // Iniciar sesión automáticamente
+    Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
-    }
+    // Redirigir al dashboard
+    return redirect()->route('dashboard');
+    }   
 }

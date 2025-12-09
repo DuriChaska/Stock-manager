@@ -67,18 +67,28 @@
 
         </div>
 
-        <!-- Botones -->
-        <div class="flex justify-end gap-4 mt-8">
-            <a href="{{ route('inventario.index') }}"
-               class="px-5 py-2 transition bg-gray-200 rounded-full hover:bg-gray-300">
-               Cancelar
-            </a>
+        {{-- BOTONES --}}
+                <div class="flex justify-between mt-10">
 
-            <button type="submit"
-                    class="px-6 py-2 text-white transition bg-green-600 rounded-full shadow-md hover:bg-green-700">
-                <i class="mr-1 fa-solid fa-save"></i> Guardar producto
-            </button>
-        </div>
+                {{-- Limpiar --}}
+                <button type="reset"
+                        class="px-6 py-3 text-gray-700 transition border border-gray-400 rounded-full hover:bg-gray-200">
+                    Limpiar
+                </button>
+
+                <div class="flex gap-4">
+
+                    {{-- Cancelar --}}
+                    <a href="{{ route('inventario.index') }}"
+                       class="px-6 py-3 text-gray-700 transition border border-gray-400 rounded-full hover:bg-gray-200">
+                        Cancelar
+                    </a>
+
+                    <button type="submit" 
+                        class="flex items-center gap-2 px-8 py-2 text-black bg-[#97BB5C] rounded-full hover:bg-[#749646]">
+                        <img src="{{ asset('images/savedisk_121993.png') }}" class="w-5 h-5" alt="Guardar">
+                        Guardar Producto
+                    </button>
 
     </form>
 

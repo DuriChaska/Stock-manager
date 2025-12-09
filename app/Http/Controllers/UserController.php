@@ -3,93 +3,88 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Role; 
+use App\Models\Role;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash; 
+
 
 class UserController extends Controller
 {
-    
+
     public function index()
     {
-        
-        $users = User::with('role')->get(); 
-      
-        return view('users.index', compact('users'));
+        $users = User::all();
+
+        return view('usuarios.index', [
+            'users' => $users,
+            'totalUsuarios'   => $users->count(),
+            'totalAdmins'     => $users->where('role_id', 1)->count(),
+            'totalVendedores' => $users->where('role_id', 2)->count(),
+            'totalAlmacen'    => $users->where('role_id', 3)->count(),
+        ]);
     }
 
-    
     public function create()
     {
-        
-        $roles = Role::all(); 
- 
-        return view('users.create', compact('roles')); 
+        $roles = Role::all();
+        return view('usuarios.create', compact('roles'));
     }
 
-   
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'role_id' => 'required|exists:roles,id', 
-            'telefono' => 'nullable|string|max:20', 
+            'name'     => 'required',
+            'email'    => 'required|email|unique:users',
+            'password' => 'required|min:6',
+            'role_id'  => 'required',
         ]);
 
         User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password), 
-            'role_id' => $request->role_id, 
-            'telefono' => $request->telefono,
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'password' => bcrypt($request->password),
+            'role_id'  => $request->role_id,
         ]);
 
-       
-        return redirect()->route('usuarios.index')->with('success', 'Usuario creado con éxito.');
+        return redirect()->route('usuarios.index')
+            ->with('success', 'Usuario creado correctamente.');
     }
 
-    
     public function edit(User $usuario)
     {
-        
         $roles = Role::all();
-        $user = $usuario; 
-       
-        return view('users.edit', compact('user', 'roles'));
+        return view('usuarios.edit', compact('usuario', 'roles'));
     }
 
-   
     public function update(Request $request, User $usuario)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            
-            'email' => 'required|string|email|max:255|unique:users,email,' . $usuario->id, 
-            'password' => 'nullable|string|min:8|confirmed', 
-            'role_id' => 'required|exists:roles,id',
-            'telefono' => 'nullable|string|max:20',
+            'name'     => 'required',
+            'email'    => "required|email|unique:users,email,{$usuario->id}",
+            'role_id'  => 'required',
         ]);
 
-        $data = $request->only(['name', 'email', 'role_id', 'telefono']);
+        $usuario->update([
+            'name'    => $request->name,
+            'email'   => $request->email,
+            'role_id' => $request->role_id,
+        ]);
 
-        
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
-        }
-
-        $usuario->update($data);
-
-     
-        return redirect()->route('usuarios.index')->with('success', 'Usuario actualizado con éxito.');
+        return redirect()->route('usuarios.index')
+            ->with('success', 'Usuario actualizado.');
     }
 
-   
     public function destroy(User $usuario)
     {
         $usuario->delete();
-       
-        return redirect()->route('usuarios.index')->with('success', 'Usuario eliminado con éxito.');
+
+        return redirect()->route('usuarios.index')
+            ->with('success', 'Usuario eliminado.');
+    }
+
+    public function show($id)
+    {
+        $user = User::with('role')->findOrFail($id);
+
+        return view('usuarios.show', compact('user'));
     }
 }

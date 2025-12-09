@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('movimientos', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('usuario_id')->constrained('usuarios')->onDelete('cascade');
+        $table->foreignId('usuario_id')->constrained('users')->cascadeOnDelete();
         $table->foreignId('producto_id')->constrained('productos')->onDelete('cascade'); 
         $table->foreignId('proveedor_id')->constrained('proveedores')->onDelete('cascade');
         

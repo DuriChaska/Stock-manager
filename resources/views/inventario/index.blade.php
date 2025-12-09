@@ -8,7 +8,7 @@
     <h1 class="text-3xl font-bold">Gestión de Inventario</h1>
 
     <a href="{{ route('inventario.create') }}"
-       class="px-5 py-2 text-white transition bg-green-600 rounded-full shadow-md hover:bg-green-700">
+       class="flex items-center gap-2 px-4 py-2 font-semibold text-white bg-[#97BB5C] shadow-md rounded-xl hover:bg-[#749646">
        + Agregar Producto
     </a>
 </div>

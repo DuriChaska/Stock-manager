@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet"/>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -20,7 +20,7 @@
 
 <div class="flex min-h-screen">
 
-    {{-- SIDEBAR --}}
+    {{-- 🔵 SIDEBAR --}}
     <aside class="fixed h-full transition-all duration-300 bg-white shadow w-60">
         <div class="p-6 text-xl font-bold text-center border-b">
             <img src="/images/logo-nav.png" class="w-12 mx-auto mb-2" alt="Logo">
@@ -32,7 +32,7 @@
 
 
                 <li>
-                    <a href="{{ route('dashboard') }}" 
+                    <a href="{{ route('dashboard') }}"
                        class="flex items-center gap-3 px-6 py-3 hover:bg-[#97BB5C] transition rounded-full
                        {{ request()->routeIs('dashboard') ? 'bg-[#97BB5C]' : '' }}">
                         <img src="/images/dashboard_icon_221153.png" class="w-5">
@@ -42,7 +42,7 @@
 
 
                 <li>
-                    <a href="{{ route('inventario.index') }}" 
+                    <a href="{{ route('inventario.index') }}"
                        class="flex items-center gap-3 px-6 py-3 hover:bg-[#97BB5C] transition rounded-full
                        {{ request()->routeIs('inventario.*') ? 'bg-[#97BB5C]' : '' }}">
                         <img src="/images/wondicon-ui-free-parcel_111208.png" class="w-5">
@@ -52,7 +52,7 @@
 
 
                 <li>
-                    <a href="{{ route('movimientos.index') }}" 
+                    <a href="{{ route('movimientos.index') }}"
                        class="flex items-center gap-3 px-6 py-3 hover:bg-[#97BB5C] transition rounded-full
                        {{ request()->routeIs('movimientos.*') ? 'bg-[#97BB5C]' : '' }}">
                         <img src="/images/arrow_data_transfer_vertical_sync_icon_183025.png" class="w-5">
@@ -62,25 +62,25 @@
 
 
                 <li>
-                    <a href="{{ route('reportes.index') }}" 
-                        class="flex items-center gap-3 px-6 py-3 hover:bg-[#97BB5C] transition rounded-full
-                        {{ request()->routeIs('reportes.*') ? 'bg-[#97BB5C]' : '' }}">
+                    <a href="{{ route('reportes.index') }}"
+                       class="flex items-center gap-3 px-6 py-3 hover:bg-[#97BB5C] transition rounded-full
+                       {{ request()->routeIs('reportes.*') ? 'bg-[#97BB5C]' : '' }}">
                         <img src="/images/graphical-business-presentation-on-a-screen_icon-icons.com_73240.png" class="w-5">
                         <span>Reportes</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ route('usuarios.index') }}" 
-                        class="flex items-center gap-3 px-6 py-3 hover:bg-[#97BB5C] transition rounded-full
-                        {{ request()->routeIs('usuarios.*') ? 'bg-[#97BB5C]' : '' }}">
+                    <a href="{{ route('usuarios.index') }}"
+                       class="flex items-center gap-3 px-6 py-3 hover:bg-[#97BB5C] transition rounded-full
+                       {{ request()->routeIs('usuarios.*') ? 'bg-[#97BB5C]' : '' }}">
                         <img src="/images/4105943-accounts-group-people-user-user-group-users_113923.png" class="w-5">
                         <span>Usuarios</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ route('proveedores.index') }}" 
+                    <a href="{{ route('proveedores.index') }}"
                        class="flex items-center gap-3 px-6 py-3 hover:bg-[#97BB5C] transition rounded-full
                        {{ request()->routeIs('proveedores.*') ? 'bg-[#97BB5C]' : '' }}">
                         <img src="/images/descargar (5).png" class="w-5">
@@ -92,44 +92,39 @@
         </nav>
     </aside>
 
-    {{-- CONTENIDO --}}
+    {{-- 🔵 CONTENIDO --}}
     <div class="flex-1 ml-60">
 
-        {{-- Barra superior --}}
+        {{-- 🔵 TOPBAR --}}
         <div class="flex items-center justify-between p-4 bg-white shadow">
 
-           {{-- 🔍 Buscador --}}
-        <div class="relative flex items-center w-full max-w-3xl px-4 py-2 bg-white border rounded-full shadow-sm">
-        <input id="searchInput" type="text" placeholder="Buscar productos..." class="flex-1 text-sm bg-transparent outline-none">
-        <img src="{{ asset('images/3844432-magnifier-search-zoom_110300.png') }}" alt="Buscar" class="w-5 h-5 ml-2 transition cursor-pointer opacity-70 hover:opacity-100" />
-            <div id="resultBox" class="absolute left-0 z-50 w-full mt-1 bg-white rounded shadow-lg top-full"></div> 
-        </div>
-
-
-            <div class="flex items-center gap-4">
-
-                {{-- 🔔 Notification bell --}}
-                <button id="notifyBell" class="relative transition hover:scale-110">
-                    <img src="/images/bell_ring_outline_icon_139893.png" class="w-6">
-                    <span class="absolute flex items-center justify-center w-4 h-4 text-xs text-white bg-red-500 rounded-full -top-1 -right-1">3</span>
-                </button>
-
-                {{-- Perfil --}}
-                @include('layouts.navigation')
-
+            {{-- 🔍 Buscador --}}
+            <div class="relative flex items-center w-full max-w-3xl px-4 py-2 bg-white border rounded-full shadow-sm">
+                <input id="searchInput" type="text" placeholder="Buscar productos..." class="flex-1 text-sm bg-transparent outline-none">
+                <img src="{{ asset('images/3844432-magnifier-search-zoom_110300.png') }}" alt="Buscar" class="w-5 h-5 ml-2 cursor-pointer opacity-70 hover:opacity-100" />
+                <div id="resultBox" class="absolute left-0 z-50 w-full mt-1 bg-white rounded shadow-lg top-full"></div>
             </div>
+
+            {{-- 🔔 Campana + Perfil --}}
+            <div class="flex items-center gap-6">
+                @include('layouts.navigation')
+                
+            </div>
+
         </div>
 
+        {{-- 🔵 CONTENIDO DE LA PÁGINA --}}
         <main class="p-6">
             {{ $slot ?? '' }}
             @yield('content')
         </main>
 
     </div>
-    
+
 </div>
 
 
+{{-- 🔵 SCRIPT DEL BUSCADOR --}}
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.querySelector('#searchInput');
@@ -154,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.addEventListener('input', buscar);
 });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 
 </body>
 </html>
