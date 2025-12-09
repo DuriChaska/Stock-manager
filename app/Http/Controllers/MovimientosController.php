@@ -17,14 +17,14 @@ class MovimientosController extends Controller
         $this->middleware('auth');
     }
 
-    /* ====== LISTADO PRINCIPAL ====== */
+
     public function index()
     {
         $movimientos = Movimiento::with(['usuario', 'producto'])
             ->orderBy('created_at', 'desc')
             ->get();
 
-        // Estadísticas para los cuadros
+        // estadisticas
         $stats = [
             'entradas' => Movimiento::where('tipo', 'entrada')->sum('cantidad'),
             'salidas' => Movimiento::where('tipo', 'salida')->sum('cantidad'),
@@ -38,7 +38,7 @@ class MovimientosController extends Controller
     }
 
 
-    /* ====== FORMULARIO DE ENTRADA ====== */
+   
     public function entrada()
     {
         $productos = Producto::with('marca')->orderBy('nombre')->get();
@@ -48,7 +48,7 @@ class MovimientosController extends Controller
     }
 
 
-    /* ====== FORMULARIO DE SALIDA ====== */
+    
     public function salida()
     {
         $productos = Producto::with('marca')->orderBy('nombre')->get();
@@ -58,7 +58,7 @@ class MovimientosController extends Controller
     }
 
 
-    /* ====== GUARDAR MOVIMIENTO ====== */
+    // guardar movimiento
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -73,16 +73,16 @@ class MovimientosController extends Controller
 
         $producto = Producto::find($data['producto_id']);
 
-        // Validación de existencia
+        // validacion de existencia
         if ($data['tipo'] === 'salida' && $producto->existencia < $data['cantidad']) {
             return back()->withErrors(['cantidad' => 'No hay suficiente stock disponible.'])->withInput();
         }
 
-        // Actualizar stock
+        // actualizar stock
         $producto->existencia += ($data['tipo'] === 'entrada' ? $data['cantidad'] : -$data['cantidad']);
         $producto->save();
 
-        // Guardar movimiento
+        // guardar movimiento
         Movimiento::create([
             'usuario_id' => auth()->id(),
             'producto_id'  => $data['producto_id'],

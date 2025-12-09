@@ -13,11 +13,11 @@ class DashboardController extends Controller
     
     public function index()
     {
-        // Tarjetas resumen
-        $total_productos = Producto::sum('existencia'); // total stock sumado
+        // tarjetas resumen
+        $total_productos = Producto::sum('existencia'); 
         $existencia_baja_count = Producto::where('existencia', '<', 10)->count();
 
-        // Movimientos del día
+        // movimientos del dia
         $movimientos_hoy = Movimiento::where('tipo', 'salida')
             ->whereDate('fecha', today())
             ->get();
@@ -25,7 +25,7 @@ class DashboardController extends Controller
         $ventas_hoy = $movimientos_hoy->sum('cantidad');
         $ingresos_hoy = $movimientos_hoy->sum('costo');
 
-        // Gráfica barras (ventas semanales)
+        // grafica venta semanales
         $dias = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
         $weekly_sales_data = [];
 
@@ -35,12 +35,12 @@ class DashboardController extends Controller
                 ->sum('cantidad');
         }
 
-        // Gráfica dona (existencia por marca)
+        //grafica donas marcas
         $brand_distribution = Marca::withSum('productos as total_stock', 'existencia')->get();
         $brand_distribution_labels = $brand_distribution->pluck('nombre')->toArray();
         $brand_distribution_data = $brand_distribution->pluck('total_stock')->toArray();
 
-        // Top 5 productos más vendidos del mes
+        //productos mas vendidos mes
         $top_products = Producto::select('productos.*')
             ->join('movimientos', 'productos.id', '=', 'movimientos.producto_id')
             ->where('movimientos.tipo', 'salida')

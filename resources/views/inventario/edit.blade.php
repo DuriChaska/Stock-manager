@@ -8,16 +8,19 @@
 
 <div class="p-8 bg-white shadow-xl rounded-xl">
 
-    <form action="{{ route('inventario.update', $producto->id) }}" method="POST" enctype="multipart/form-data">
+
+    <form action="{{ route('inventario.update', $producto->id) }}" 
+          method="POST" enctype="multipart/form-data">
+
         @csrf
         @method('PUT')
 
-        <!-- Nombre -->
+        {{-- nombre --}}
         <label class="block mb-2 font-semibold">Nombre:</label>
         <input type="text" name="nombre" value="{{ $producto->nombre }}"
                class="w-full px-3 py-2 mb-4 border rounded" required>
 
-        <!-- Marca -->
+        {{-- marca --}}
         <label class="block mb-2 font-semibold">Marca:</label>
         <select name="marca_id" class="w-full px-3 py-2 mb-4 border rounded" required>
             @foreach ($marcas as $marca)
@@ -28,28 +31,40 @@
             @endforeach
         </select>
 
-        <!-- Talla opcional -->
+        {{-- proveedor --}}
+        <label class="block mb-2 font-semibold">Proveedor:</label>
+        <select name="proveedor_id" class="w-full px-3 py-2 mb-4 border rounded" required>
+            @foreach ($proveedores as $proveedor)
+                <option value="{{ $proveedor->id }}"
+                    {{ $producto->proveedor_id == $proveedor->id ? 'selected' : '' }}>
+                    {{ $proveedor->nombre_empresa }}
+                </option>
+            @endforeach
+        </select>
+
+        {{-- checkbox talla --}}
         <label class="block mb-2 font-semibold">¿Usa talla?</label>
         <input type="checkbox" id="toggleTalla" onchange="mostrarTalla()"
                {{ $producto->talla ? 'checked' : '' }}>
 
+        {{-- campo talla (solo se muestra si el producto tiene una) --}}
         <div id="campoTalla" class="{{ $producto->talla ? '' : 'hidden' }} mt-3">
             <label class="block mb-1 font-medium">Talla (opcional)</label>
             <input type="text" name="talla" value="{{ $producto->talla }}"
                    class="w-full px-3 py-2 border rounded">
         </div>
 
-        <!-- Existencia -->
+        {{-- existencia --}}
         <label class="block mt-4 mb-2 font-semibold">Existencia:</label>
         <input type="number" name="existencia" value="{{ $producto->existencia }}"
                class="w-full px-3 py-2 mb-4 border rounded" required>
 
-        <!-- Precio -->
+        {{-- precio --}}
         <label class="block mb-2 font-semibold">Precio:</label>
         <input type="number" step="0.01" name="precio" value="{{ $producto->precio }}"
                class="w-full px-3 py-2 mb-4 border rounded" required>
 
-        <!-- Imagen -->
+        {{-- imagen actual --}}
         <label class="block mb-2 font-semibold">Imagen actual:</label>
         @if ($producto->imagen)
             <img src="{{ asset('storage/' . $producto->imagen) }}" class="w-32 mb-4 rounded">
@@ -57,9 +72,11 @@
             <p class="text-gray-500">Sin imagen</p>
         @endif
 
+        {{-- subir nueva imagen --}}
         <label class="block mt-4 mb-2 font-semibold">Subir nueva imagen:</label>
         <input type="file" name="imagen" class="w-full px-3 py-2 mb-6 border rounded">
 
+        {{-- boton para actualizar --}}
         <button class="px-6 py-2 text-white bg-green-600 rounded hover:bg-green-700">
             Actualizar Producto
         </button>
@@ -70,6 +87,7 @@
 
 @endsection
 
+{{-- script mostrar/ocultar talla --}}
 <script>
 function mostrarTalla() {
     document.getElementById('campoTalla')

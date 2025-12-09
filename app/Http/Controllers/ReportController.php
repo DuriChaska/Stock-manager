@@ -12,15 +12,13 @@ class ReportController extends Controller
     
     public function index()
     {
-        // ---------------------------
-        // 1. PERIODO SELECCIONADO
-        // ---------------------------
-        $period = request('period', 'last_month'); // last_month | last_quarter | year
+       //periodo de reporte
+        $period = request('period', 'last_month'); // ultimo mes | ultimo trimestre | año
         $today  = Carbon::today();
 
         switch ($period) {
             case 'last_quarter':
-                // Último trimestre completo
+                // ultimo trimestre 
                 $currentStart  = $today->copy()->startOfQuarter()->subQuarter();
                 $currentEnd    = $today->copy()->startOfQuarter()->subDay();
                 $previousStart = $currentStart->copy()->subQuarter();
@@ -29,7 +27,7 @@ class ReportController extends Controller
                 break;
 
             case 'year':
-                // Año actual
+                // año actual
                 $currentStart  = $today->copy()->startOfYear();
                 $currentEnd    = $today;
                 $previousStart = $currentStart->copy()->subYear();
@@ -39,7 +37,7 @@ class ReportController extends Controller
 
             case 'last_month':
             default:
-                // Último mes completo
+                // ultimo mes
                 $lastMonth     = $today->copy()->subMonth();
                 $currentStart  = $lastMonth->copy()->startOfMonth();
                 $currentEnd    = $lastMonth->copy()->endOfMonth();
@@ -49,14 +47,11 @@ class ReportController extends Controller
                 break;
         }
 
-        // Helper para aplicar rango de fechas a movimientos de salida
+        //aplicar rango de fechas a movimientos de salida
         $baseMovimientos = Movimiento::where('tipo', 'salida');
 
-        // ---------------------------
-        // 2. MÉTRICAS DEL PERIODO
-        // ---------------------------
-
-        // Ventas totales = suma de cantidades vendidas (opción 1-B)
+        //metricas principales
+        // ventas totales = suma de cantidades vendidas (opción 1-B)
         $ventasTotales = (clone $baseMovimientos)
             ->whereBetween('fecha', [$currentStart, $currentEnd])
             ->sum('cantidad');
@@ -65,7 +60,7 @@ class ReportController extends Controller
             ->whereBetween('fecha', [$previousStart, $previousEnd])
             ->sum('cantidad');
 
-        // Ingresos = SUM(cantidad * precio_producto) (no usamos campo costo, opción 2-NO)
+        // ingresos = SUM(cantidad * precio_producto) (no usamos campo costo, opción 2-NO)
         $ingresosTotales = (clone $baseMovimientos)
             ->whereBetween('fecha', [$currentStart, $currentEnd])
             ->join('productos', 'movimientos.producto_id', '=', 'productos.id')
@@ -78,24 +73,22 @@ class ReportController extends Controller
             ->selectRaw('SUM(movimientos.cantidad * productos.precio) as total')
             ->value('total') ?? 0;
 
-        // Ticket promedio = ingresos / cantidad vendida (opción 3-B)
+        // ticket promedio = ingresos / cantidad vendida (opción 3-B)
         $ticketPromedio = $ventasTotales > 0 ? $ingresosTotales / $ventasTotales : 0;
         $ticketPrevio   = $ventasPrevias > 0 ? $ingresosPrevios / $ventasPrevias : 0;
 
         // Stock total
         $stockTotal = Producto::sum('existencia');
 
-        // Rotación de stock = ventas del periodo / stock promedio (opción 4-Sí)
+        // rotacion de stock = ventas del periodo / stock promedio (opción 4-Sí)
         $stockPromedio = Producto::avg('existencia') ?: 1;
         $rotacionStock = $ventasTotales / $stockPromedio;
         $rotacionPrev  = $ventasPrevias / $stockPromedio;
 
-        // ---------------------------
-        // 3. CAMBIO VS PERIODO ANTERIOR (opción 5-Mes anterior)
-        // ---------------------------
+        //cambios con respecto al periodo previo
         $calcCambio = function ($actual, $previo) {
             if ($previo == 0) {
-                return null; // sin datos previos
+                return null; 
             }
             return (($actual - $previo) / $previo) * 100;
         };
@@ -105,9 +98,7 @@ class ReportController extends Controller
         $ticketCambio   = $calcCambio($ticketPromedio,  $ticketPrevio);
         $rotacionCambio = $calcCambio($rotacionStock,   $rotacionPrev);
 
-        // ---------------------------
-        // 4. GRÁFICO: TENDENCIA (ventas + ingresos)
-        // ---------------------------
+        //grafica tendencias
         $ventasDiarias = (clone $baseMovimientos)
             ->whereBetween('fecha', [$currentStart, $currentEnd])
             ->join('productos', 'movimientos.producto_id', '=', 'productos.id')
@@ -122,9 +113,7 @@ class ReportController extends Controller
         $ventasLineaCantidades = $ventasDiarias->pluck('total_cantidad');
         $ventasLineaIngresos   = $ventasDiarias->pluck('total_ingresos');
 
-        // ---------------------------
-        // 5. GRÁFICO: VENTAS POR MARCA (dona)
-        // ---------------------------
+        // Grafico ventas marcas
         $ventasMarca = Marca::with(['productos.movimientos' => function ($q) use ($currentStart, $currentEnd) {
                 $q->where('tipo', 'salida')
                   ->whereBetween('fecha', [$currentStart, $currentEnd]);
@@ -136,9 +125,7 @@ class ReportController extends Controller
             return $marca->productos->sum(fn($p) => $p->movimientos->sum('cantidad'));
         });
 
-        // ---------------------------
-        // 6. TOP 5 PRODUCTOS MÁS VENDIDOS
-        // ---------------------------
+        // productos mas vendidos
         $topProductos = Producto::withSum(['movimientos as total_ventas' => function ($q) use ($currentStart, $currentEnd) {
                 $q->where('tipo', 'salida')
                   ->whereBetween('fecha', [$currentStart, $currentEnd]);

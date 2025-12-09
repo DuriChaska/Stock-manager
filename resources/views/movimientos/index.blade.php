@@ -5,14 +5,14 @@
     
     <main class="flex-1 p-8 md:p-10">
 
-        {{-- TÍTULO --}}
+        {{-- titulo --}}
         <h2 class="text-3xl font-bold text-gray-900">Movimientos de Inventario</h2>
         <p class="mb-10 text-gray-600">Historial de entradas y salidas de productos</p>
 
-        {{-- ESTADÍSTICAS DE MOVIMIENTOS --}}
+        {{-- estadísticas de movimientos --}}
         <div class="grid grid-cols-1 gap-4 mb-10 md:grid-cols-3">
 
-        {{-- Total de Entradas --}}
+        {{-- total de entradas --}}
         <div class="flex items-center justify-between p-5 transition bg-green-100 border border-green-200 shadow-sm hover:bg-green-200 rounded-2xl">
             <div class="flex flex-col">
                 <p class="text-sm font-medium text-green-800">Total de entradas</p>
@@ -22,7 +22,7 @@
             <img src="{{ asset('images/analytics_statistics_arrow_arriba_chart_graph_stock_icon_267146.png') }}" alt="Entradas Icon" class="w-12 h-12" />
         </div>
 
-        {{-- Total de Salidas --}}
+        {{-- total de salidas --}}
         <div class="flex items-center justify-between p-5 transition bg-red-100 border border-red-200 shadow-sm hover:bg-red-200 rounded-2xl">
             <div class="flex flex-col">
                 <p class="text-sm font-medium text-red-800">Total de salidas</p>
@@ -32,7 +32,7 @@
             <img src="{{ asset('images/analytics_statistics_arrow_chart_graph_stock_icon_267146.png') }}" alt="Salidas Icon" class="w-12 h-12" />
         </div>
 
-        {{-- Balance Neto --}}
+        {{-- balance neto --}}
         <div class="flex items-center justify-between p-5 transition border border-green-200 shadow-sm bg-green-50 hover:bg-green-100 rounded-2xl">
             <div class="flex flex-col">
                 <p class="text-sm font-medium text-green-800">Balance neto</p>
@@ -46,11 +46,11 @@
 
         </div>
 
-        {{-- FILTROS Y BÚSQUEDA --}}
+        {{-- filtros y búsqueda --}}
         <div class="p-4 mb-8 bg-white shadow rounded-2xl">
             <form method="GET" class="grid items-center w-full grid-cols-1 gap-4 md:grid-cols-3">
 
-                {{-- Buscador --}}
+                {{-- buscador --}}
                 <div class="relative">
                     <svg class="absolute w-5 h-5 text-gray-400 left-3 top-2.5" fill="none" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -61,7 +61,7 @@
                         class="w-full py-2 pl-10 pr-4 border border-gray-300 rounded-full focus:ring-2 focus:ring-green-400">
                 </div>
 
-                {{-- Filtro Marca --}}
+                {{-- filtro marca --}}
                 <select name="marca" class="py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-green-400">
                     <option value="">Todas las marcas</option>
                     @foreach($marcas as $marca)
@@ -71,7 +71,7 @@
                     @endforeach
                 </select>
 
-                {{-- Filtro Stock --}}
+                {{-- filtro stock --}}
                 <select name="tipo" class="py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-green-400">
                     <option value="">Todo el stock</option>
                     <option value="entrada" {{ request('tipo') == 'entrada' ? 'selected' : '' }}>Solo Entradas</option>
@@ -82,7 +82,7 @@
         </div>
 
 
-        {{-- BOTONES --}}
+        {{-- botones --}}
         <div class="flex justify-end gap-4 mb-6">
             <a href="{{ route('movimientos.entrada') }}" 
                class="flex items-center gap-2 px-4 py-2 font-semibold text-white bg-[#97BB5C] shadow-md rounded-xl hover:bg-[#749646]">
@@ -97,7 +97,7 @@
             </a>
         </div>
 
-        {{-- TABLA --}}
+        {{-- tabla --}}
         <div class="p-6 bg-white border border-gray-200 shadow-lg rounded-xl">
             <h3 class="mb-6 text-2xl font-semibold text-gray-800">Historial de movimientos</h3>
 

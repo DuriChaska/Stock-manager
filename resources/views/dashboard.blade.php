@@ -9,7 +9,7 @@
         <p class="text-gray-600">Resumen general del inventario y ventas</p>
     </div>
 
-    {{-- targetas--}}
+    {{-- tarjetas --}}
     <div class="grid grid-cols-4 gap-4">
         
         {{-- productos --}}

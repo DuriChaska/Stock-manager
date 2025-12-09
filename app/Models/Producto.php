@@ -13,27 +13,30 @@ class Producto extends Model
 
     protected $fillable = [
         'nombre',
-        'marca_id',
-        'proveedor_id',
+        
         'precio',
         'existencia',
-        'imagen'
+        'proveedor_id',
+        'marca_id',
+        'talla',
+        'imagen',
     ];
 
-    // 🔗 Marca
+
+
     public function marca()
     {
 
         return $this->belongsTo(Marca::class);
     }
 
-    // 🔗 Proveedor
+
     public function proveedor()
     {
         return $this->belongsTo(Proveedor::class);
     }
 
-    // 🔗 Movimientos del producto (entradas / salidas)
+
     public function movimientos()
     {
         return $this->hasMany(Movimiento::class, 'producto_id');

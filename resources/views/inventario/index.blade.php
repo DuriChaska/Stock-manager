@@ -15,12 +15,12 @@
 
 <p class="mb-6 text-gray-500">Administra todos los productos de calzado</p>
 
-<!-- Filtros -->
+
 <div class="p-5 mb-6 bg-white shadow-lg rounded-xl">
 
     <div class="flex items-center gap-3">
         
-        <!-- Búsqueda -->
+        <!-- busqueda -->
         <div class="relative flex-1">
             <span class="absolute text-gray-400 left-3 top-3">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -32,12 +32,12 @@
             >
         </div>
 
-        <!-- Select de marcas -->
+        <!-- select de marcas -->
         <select class="px-4 py-2 text-gray-700 border rounded-full shadow-sm focus:ring-green-400">
             <option>Todas las marcas</option>
         </select>
 
-        <!-- Select de stock -->
+        <!-- select de stock -->
         <select class="px-4 py-2 text-gray-700 border rounded-full shadow-sm focus:ring-green-400">
             <option>Todo el stock</option>
         </select>
@@ -45,7 +45,7 @@
     </div>
 </div>
 
-<!-- Tabla de productos -->
+<!-- tabla de productos -->
 <div class="p-6 bg-white shadow-xl rounded-2xl">
 
     <h2 class="mb-6 text-2xl font-semibold">Productos ({{ count($productos) }})</h2>
@@ -68,7 +68,7 @@
             @foreach ($productos as $p)
                 <tr class="transition border-b hover:bg-gray-100">
                     
-                    <!-- Producto -->
+                    <!-- producto -->
                     <td class="flex items-center gap-4 py-4">
                         <img src="{{ $p->imagen ? asset('storage/'.$p->imagen) : '/img/default.jpg' }}"
                             class="object-cover shadow-md w-14 h-14 rounded-xl">
@@ -78,19 +78,19 @@
                         </span>
                     </td>
 
-                    <!-- Marca -->
+                    <!-- marca -->
                     <td>
                         <span class="px-4 py-1 text-sm font-medium bg-gray-200 rounded-full shadow-sm">
                             {{ $p->marca->nombre ?? 'Sin marca' }}
                         </span>
                     </td>
 
-                    <!-- Talla -->
+                    <!-- talla -->
                     <td class="font-medium text-gray-700">
                         {{ $p->talla }}
                     </td>
 
-                    <!-- Existencia -->
+                    <!-- existencia -->
                     <td>
                         @if ($p->existencia >= 20)
                             <span class="px-4 py-1 text-sm text-green-900 bg-green-200 rounded-full shadow-sm">
@@ -107,30 +107,30 @@
                         @endif
                     </td>
 
-                    <!-- Precio -->
+                    <!-- precio -->
                     <td class="text-lg font-semibold text-gray-800">
                         ${{ number_format($p->precio, 2) }}
                     </td>
 
-                    <!-- Acciones -->
+                    <!-- acciones -->
                     <td class="text-center">
                         <div class="flex items-center justify-center gap-4">
 
-                            <!-- VER -->
+                            <!-- ver -->
                             <a href="{{ route('inventario.show', $p->id) }}"
                             title="Ver">
                                 <img src="/images/eye_visible_hide_hidden_show_icon_145988.png" 
                                     class="transition-transform cursor-pointer w-7 h-7 hover:scale-110">
                             </a>
 
-                            <!-- EDITAR -->
+                            <!-- editar -->
                             <a href="{{ route('inventario.edit', $p->id) }}"
                             title="Editar">
                                 <img src="/images/creative_design_draw_illustration_pen_pencil_write_icon_123895.png" 
                                     class="transition-transform cursor-pointer w-7 h-7 hover:scale-110">
                             </a>
 
-                            <!-- ELIMINAR -->
+                            <!-- eliminar -->
                             <form action="{{ route('inventario.destroy', $p->id) }}" 
                                 method="POST"
                                 onsubmit="return confirm('¿Eliminar producto?')">

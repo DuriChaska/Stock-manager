@@ -20,7 +20,7 @@
 
 <div class="flex min-h-screen">
 
-    {{-- 🔵 SIDEBAR --}}
+    {{-- sliderbar --}}
     <aside class="fixed h-full transition-all duration-300 bg-white shadow w-60">
         <div class="p-6 text-xl font-bold text-center border-b">
             <img src="/images/logo-nav.png" class="w-12 mx-auto mb-2" alt="Logo">
@@ -92,20 +92,20 @@
         </nav>
     </aside>
 
-    {{-- 🔵 CONTENIDO --}}
+    {{-- contenido principal --}}
     <div class="flex-1 ml-60">
 
-        {{-- 🔵 TOPBAR --}}
+        {{-- top bas --}}
         <div class="flex items-center justify-between p-4 bg-white shadow">
 
-            {{-- 🔍 Buscador --}}
+            {{-- buscador--}}
             <div class="relative flex items-center w-full max-w-3xl px-4 py-2 bg-white border rounded-full shadow-sm">
                 <input id="searchInput" type="text" placeholder="Buscar productos..." class="flex-1 text-sm bg-transparent outline-none">
                 <img src="{{ asset('images/3844432-magnifier-search-zoom_110300.png') }}" alt="Buscar" class="w-5 h-5 ml-2 cursor-pointer opacity-70 hover:opacity-100" />
                 <div id="resultBox" class="absolute left-0 z-50 w-full mt-1 bg-white rounded shadow-lg top-full"></div>
             </div>
 
-            {{-- 🔔 Campana + Perfil --}}
+            {{-- campana--}}
             <div class="flex items-center gap-6">
                 @include('layouts.navigation')
                 
@@ -113,7 +113,7 @@
 
         </div>
 
-        {{-- 🔵 CONTENIDO DE LA PÁGINA --}}
+        {{-- contenido de la pagina --}}
         <main class="p-6">
             {{ $slot ?? '' }}
             @yield('content')
@@ -124,7 +124,7 @@
 </div>
 
 
-{{-- 🔵 SCRIPT DEL BUSCADOR --}}
+{{-- scipt buscador--}}
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.querySelector('#searchInput');

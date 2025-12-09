@@ -36,17 +36,16 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Última vez que inició sesión en formato humano
-     */
+    //ultima vez que inicio sesio n en formato humano
+
     public function lastSeenHuman()
     {
-        // Si nunca ha iniciado sesión
+        // si nunca ha iniciado sesión
         if (!$this->last_login_at) {
             return 'Nunca ha iniciado sesión';
         }
 
-        // Gracias al cast, ya es un objeto Carbon
+        
         return $this->last_login_at->diffForHumans();
     }
 

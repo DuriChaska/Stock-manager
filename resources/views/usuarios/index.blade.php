@@ -32,7 +32,7 @@
             @foreach ($users as $u)
             <tr class="border-b hover:bg-gray-50">
                 
-                <!-- Avatar + Nombre -->
+                <!-- avatar + nombre -->
                 <td class="py-4">
                     <div class="flex items-center gap-4">
 
@@ -51,17 +51,17 @@
                     </div>
                 </td>
 
-                <!-- Email -->
+                <!-- email -->
                 <td class="text-gray-700">{{ $u->email }}</td>
 
-                <!-- Rol -->
+                <!-- rol -->
                 <td>
                     <span class="px-3 py-1 text-sm text-green-700 bg-green-100 rounded-full">
                         {{ $u->role->name ?? 'Sin rol' }}
                     </span>
                 </td>
 
-                <!-- Estado -->
+                <!-- estado -->
                 <td>
                     @if ($u->active)
                         <span class="px-3 py-1 text-sm text-green-800 bg-green-200 rounded-full">
@@ -74,21 +74,21 @@
                     @endif
                 </td>
 
-                <!-- Acciones -->
+                <!-- acciones -->
                 <td class="text-center">
                     <div class="flex justify-center gap-4 text-xl">
 
-                        <!-- VER -->
+                        <!-- ver -->
                         <a href="{{ route('usuarios.show', $u->id) }}">
                             <img src="/images/eye_visible_hide_hidden_show_icon_145988.png" class="w-5 opacity-70 hover:opacity-100">
                         </a>
 
-                        <!-- EDITAR -->
+                        <!-- editar -->
                         <a href="{{ route('usuarios.edit', $u->id) }}">
                             <img src="/images/creative_design_draw_illustration_pen_pencil_write_icon_123895.png" class="w-5 opacity-70 hover:opacity-100">
                         </a>
 
-                        <!-- ELIMINAR -->
+                        <!-- eliminar -->
                         <form action="{{ route('usuarios.destroy', $u->id) }}" method="POST"
                             onsubmit="return confirm('¿Eliminar usuario?')">
                             @csrf

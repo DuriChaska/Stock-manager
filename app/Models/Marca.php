@@ -12,7 +12,7 @@ class Marca extends Model
 
     protected $fillable = ['nombre', 'proveedor_id'];
 
-    // RELACIÓN: Una marca tiene muchos productos
+    
     public function productos()
     {
         return $this->hasMany(Producto::class);

@@ -19,7 +19,7 @@
 
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 
-            <!-- Nombre -->
+            <!-- nombre -->
             <div>
                 <label class="block mb-1 font-medium">Nombre del producto *</label>
                 <input type="text" name="nombre"
@@ -27,21 +27,31 @@
                        required>
             </div>
 
-            <!-- Marca -->
+            <!-- marca -->
             <div>
                 <label class="font-medium">Marca *</label>
-                <select name="marca_id"
-                    class="w-full px-4 py-2 text-black bg-white border shadow-inner rounded-xl focus:ring-2 focus:ring-green-400"
-                    required>
-                    <option value="">Seleccione Marca</option>
+                
+                <div class="flex gap-2">
+                    <select id="marca_id" name="marca_id"
+                        class="w-full px-4 py-2 text-black bg-white border shadow-inner rounded-xl focus:ring-2 focus:ring-green-400"
+                        required>
+                        <option value="">Seleccione Marca</option>
 
-                    @foreach ($marcas as $marca)
-                        <option value="{{ $marca->id }}">{{ $marca->nombre }}</option>
-                    @endforeach
-                </select>
+                        @foreach ($marcas as $marca)
+                            <option value="{{ $marca->id }}">{{ $marca->nombre }}</option>
+                        @endforeach
+                    </select>
+
+                    <!-- boton para agregar marca -->
+                    <button type="button"
+                        id="btnAbrirModalMarca"
+                        class="px-4 text-xl font-bold text-white bg-green-600 rounded-full hover:bg-green-700">
+                        +
+                    </button>
+                </div>
             </div>
 
-            <!-- Proveedor -->
+            <!-- proveedor -->
             <div>
                 <label class="font-medium">Proveedor *</label>
                 <select name="proveedor_id"
@@ -53,10 +63,9 @@
                         <option value="{{ $proveedor->id }}">{{ $proveedor->nombre_empresa }}</option>
                     @endforeach
                 </select>
-                
             </div>
 
-            <!-- Precio -->
+            <!-- precio -->
             <div>
                 <label class="font-medium">Precio *</label>
                 <input type="number" step="0.01" name="precio"
@@ -64,7 +73,7 @@
                        required>
             </div>
 
-            <!-- Stock -->
+            <!-- stock -->
             <div>
                 <label class="font-medium">Stock inicial *</label>
                 <input type="number" name="existencia"
@@ -72,7 +81,7 @@
                        required>
             </div>
 
-            <!-- Activar talla -->
+            <!-- activar talla -->
             <div>
                 <label class="font-medium">¿Usa talla?</label>
 
@@ -83,7 +92,7 @@
                 </div>
             </div>
 
-            <!-- Campo talla (oculto por defecto) -->
+            <!-- campo talla -->
             <div id="campoTalla" class="hidden">
                 <label class="block mb-1 font-medium">Talla (opcional)</label>
                 <input type="text" name="talla"
@@ -91,7 +100,7 @@
                        class="w-full px-4 py-2 border shadow-inner rounded-xl focus:ring-2 focus:ring-green-400">
             </div>
 
-            <!-- Imagen -->
+            <!-- imagen -->
             <div class="col-span-2">
                 <label class="font-medium">Imagen del producto</label>
                 <input type="file" name="imagen"
@@ -100,7 +109,7 @@
 
         </div>
 
-        {{-- Botones --}}
+        {{-- botones --}}
         <div class="flex justify-between mt-10">
 
             <button type="reset"
@@ -128,10 +137,117 @@
 
 @endsection
 
+{{-- script mostrar talla --}}
 <script>
 function mostrarTalla() {
     const chk = document.getElementById('toggleTalla');
     const campo = document.getElementById('campoTalla');
     campo.classList.toggle('hidden', !chk.checked);
 }
+</script>
+
+{{-- modal nueva marca --}}
+<div id="modalNuevaMarca"
+     class="fixed inset-0 z-50 items-center justify-center hidden bg-black/40">
+    <div class="w-full max-w-md p-6 bg-white shadow-xl rounded-2xl">
+
+        <h2 class="mb-4 text-xl font-semibold">Nueva marca</h2>
+
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">
+                Nombre de la marca
+            </label>
+            <input type="text" id="nombre_marca"
+                   class="w-full px-3 py-2 mt-1 border rounded-xl focus:ring-green-400 focus:border-green-500">
+            <p id="error_marca" class="hidden mt-1 text-sm text-red-600"></p>
+        </div>
+
+        <div class="flex justify-end gap-3 mt-4">
+            <button type="button" id="btnCancelarMarca"
+                class="px-4 py-2 bg-gray-300 rounded-xl hover:bg-gray-400">
+                Cancelar
+            </button>
+            <button type="button" id="btnGuardarMarca"
+                class="px-4 py-2 font-semibold text-white bg-green-600 rounded-xl hover:bg-green-700">
+                Guardar
+            </button>
+        </div>
+
+    </div>
+</div>
+
+{{-- script ajax nueva marca --}}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const btnAbrirModal = document.getElementById('btnAbrirModalMarca');
+    const modal = document.getElementById('modalNuevaMarca');
+    const btnCancelar = document.getElementById('btnCancelarMarca');
+    const btnGuardar = document.getElementById('btnGuardarMarca');
+    const inputNombre = document.getElementById('nombre_marca');
+    const errorText = document.getElementById('error_marca');
+    const selectMarca = document.getElementById('marca_id');
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    btnAbrirModal.addEventListener('click', () => {
+        inputNombre.value = '';
+        errorText.textContent = '';
+        errorText.classList.add('hidden');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        inputNombre.focus();
+    });
+
+    btnCancelar.addEventListener('click', () => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    });
+
+    btnGuardar.addEventListener('click', async () => {
+        const nombre = inputNombre.value.trim();
+
+        if (!nombre) {
+            errorText.textContent = 'Escribe un nombre para la marca.';
+            errorText.classList.remove('hidden');
+            return;
+        }
+
+        try {
+            const response = await fetch('/marcas/store-ajax', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ nombre }),
+            });
+
+            const marca = await response.json();
+
+            // crear opcion nueva y seleccionarla
+            const option = document.createElement('option');
+            option.value = marca.id;
+            option.textContent = marca.nombre;
+            option.selected = true;
+
+            selectMarca.appendChild(option);
+
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+
+        } catch (err) {
+            errorText.textContent = 'Ocurrió un error al guardar la marca.';
+            errorText.classList.remove('hidden');
+        }
+    });
+
+    // cerrar modal al hacer click fuera
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+    });
+});
 </script>

@@ -20,7 +20,7 @@
 
         <div class="grid grid-cols-2 gap-6">
 
-            <!-- Nombre -->
+            <!-- nombre -->
             <div>
                 <label class="font-semibold">Nombre *</label>
                 <input type="text" name="name"
@@ -33,7 +33,7 @@
                 @enderror
             </div>
 
-            <!-- Email -->
+            <!-- email -->
             <div>
                 <label class="font-semibold">Correo *</label>
                 <input type="email" name="email"
@@ -46,7 +46,7 @@
                 @enderror
             </div>
 
-            <!-- Rol -->
+            <!-- rol -->
             <div>
                 <label class="font-semibold">Rol *</label>
                 <select name="role_id"
@@ -66,7 +66,7 @@
                 @enderror
             </div>
 
-            <!-- Pass -->
+            <!-- contraseña -->
             <div>
                 <label class="font-semibold">Contraseña *</label>
                 <input type="password" name="password"

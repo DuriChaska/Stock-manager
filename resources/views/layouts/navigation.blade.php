@@ -1,8 +1,8 @@
-{{-- NAVIGATION BLADE --}}
+
 
 <div class="relative flex items-center gap-6">
 
-    {{-- 🔔 CAMPANA DE NOTIFICACIONES --}}
+    {{-- campana --}}
     <div class="relative">
         <button onclick="toggleNotifications()" class="relative">
             <img src="{{ asset('images/bell_ring_outline_icon_139893.png') }}" class="w-6">
@@ -14,7 +14,7 @@
             @endif
         </button>
 
-        {{-- PANEL DE NOTIFICACIONES --}}
+        {{-- panel notificaciones--}}
         <div id="notifPanel"
             class="absolute right-0 z-50 hidden p-4 mt-3 bg-white shadow-xl w-80 rounded-xl">
 
@@ -32,19 +32,19 @@
     </div>
 
 
-    {{-- 🔽 DROPDOWN DEL USUARIO --}}
+    {{-- dropdown del usuario --}}
     <x-dropdown align="right" width="48">
 
         <x-slot name="trigger">
             <button class="flex items-center gap-3">
                 
-                {{-- Avatar --}}
+                {{-- avatar --}}
                 <div class="flex items-center justify-center w-10 h-10 font-bold text-white
                     rounded-full bg-gradient-to-br from-[#97BB5C] to-[#749646] shadow">
                     {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                 </div>
 
-                {{-- Nombre --}}
+                {{-- nombre --}}
                 <span class="text-[#749646] font-semibold">
                     {{ Auth::user()->name }}
                 </span>
@@ -77,13 +77,13 @@
 </div>
 
 
-{{-- SCRIPT NOTIFICACIONES --}}
+{{-- script notificaciones --}}
 <script>
 function toggleNotifications() {
     const panel = document.getElementById('notifPanel');
     panel.classList.toggle('hidden');
 
-    // Marcar como leídas
+    // Marcar como leidas
     fetch("/notificaciones/leer");
 }
 </script>

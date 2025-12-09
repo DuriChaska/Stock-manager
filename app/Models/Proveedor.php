@@ -20,7 +20,7 @@ class Proveedor extends Model
     ];
 
 
-    // Relación: Un proveedor puede tener muchos movimientos
+    
     public function movimientos(): HasMany
     {
         return $this->hasMany(Movimiento::class);

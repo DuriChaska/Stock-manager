@@ -6,18 +6,18 @@
 
 <div class="px-8 py-4">
 
-    <!-- TÍTULO -->
+
     <div class="mb-6">
         <h1 class="text-3xl font-extrabold tracking-tight">Reportes y Análisis</h1>
         <p class="text-gray-500">Estadísticas y métricas del negocio</p>
     </div>
 
-    <!-- CONFIGURACIÓN DE REPORTE -->
+    <!-- configuracion de reporte -->
     <div class="flex flex-col gap-4 p-5 mb-8 bg-white shadow-md rounded-3xl">
         <h2 class="text-lg font-semibold">Configuración de reporte</h2>
 
         <div class="flex flex-wrap gap-4">
-            <!-- Filtro de periodo -->
+            <!-- filtro de periodo -->
             <form method="GET" class="flex items-center gap-3 px-4 py-2 rounded-full shadow-inner bg-gray-50">
                 <span class="text-gray-500">
                     <i class="fa-regular fa-calendar"></i>
@@ -31,7 +31,7 @@
                 </select>
             </form>
 
-            <!-- Tipo de reporte (solo visual por ahora) -->
+            <!-- tipo de reporte (solo visual por ahora) -->
             <div class="flex items-center gap-3 px-4 py-2 rounded-full shadow-inner bg-gray-50">
                 <span class="text-gray-500">
                     <i class="fa-regular fa-file-lines"></i>
@@ -57,10 +57,10 @@
         }
     @endphp
 
-    <!-- TARJETAS DE MÉTRICAS -->
+    <!-- tarjetas de metricas -->
     <div class="grid grid-cols-1 gap-5 mb-10 md:grid-cols-4">
 
-        <!-- VENTAS TOTALES (unidades) -->
+        <!-- ventas totales (unidades) -->
         <div class="rounded-3xl p-5 bg-gradient-to-br from-[#e9f4df] to-white shadow-md flex flex-col justify-between">
             <div class="flex items-start justify-between mb-6">
                 <h3 class="font-semibold text-gray-800">Ventas totales</h3>
@@ -74,7 +74,7 @@
             </div>
         </div>
 
-        <!-- INGRESOS -->
+        <!-- ingresos -->
         <div class="rounded-3xl p-5 bg-gradient-to-br from-[#dff4ec] to-white shadow-md flex flex-col justify-between">
             <div class="flex items-start justify-between mb-6">
                 <h3 class="font-semibold text-gray-800">Ingresos</h3>
@@ -88,7 +88,7 @@
             </div>
         </div>
 
-        <!-- TICKET PROMEDIO -->
+        <!-- ticket promedio -->
         <div class="rounded-3xl p-5 bg-gradient-to-br from-[#e0f3f0] to-white shadow-md flex flex-col justify-between">
             <div class="flex items-start justify-between mb-6">
                 <h3 class="font-semibold text-gray-800">Ticket Promedio</h3>
@@ -102,7 +102,7 @@
             </div>
         </div>
 
-        <!-- ROTACIÓN DE STOCK -->
+        <!-- rotación de stock -->
         <div class="rounded-3xl p-5 bg-gradient-to-br from-[#ecf4df] to-white shadow-md flex flex-col justify-between">
             <div class="flex items-start justify-between mb-6">
                 <h3 class="font-semibold text-gray-800">Rotación Stock</h3>
@@ -119,17 +119,17 @@
     </div>
 
 
-    <!-- GRÁFICOS PRINCIPALES -->
+    <!-- gráficos principales -->
     <div class="grid grid-cols-1 gap-6 mb-10 lg:grid-cols-2">
 
-        <!-- Tendencia -->
+        <!-- tendencia -->
         <div class="p-6 bg-white shadow-md rounded-3xl">
             <h3 class="mb-1 text-lg font-semibold">Tendencia de Ventas e Ingresos</h3>
             <p class="mb-4 text-gray-500">{{ $periodLabel }}</p>
             <canvas id="ventasChart" height="160"></canvas>
         </div>
 
-        <!-- Dona marcas -->
+        <!-- dona marcas -->
         <div class="p-6 bg-white shadow-md rounded-3xl">
             <h3 class="mb-1 text-lg font-semibold">Distribución de Ventas por Marca</h3>
             <p class="mb-4 text-gray-500">{{ $periodLabel }}</p>
@@ -139,7 +139,7 @@
     </div>
 
 
-    <!-- TOP PRODUCTOS -->
+    <!-- top productos -->
     <div class="p-6 mb-10 bg-white shadow-md rounded-3xl">
         <h3 class="mb-4 text-lg font-semibold">Productos más vendidos</h3>
 
@@ -169,11 +169,11 @@
 </div>
 
 
-<!-- CHART.JS -->
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    // === TENDENCIA VENTAS + INGRESOS ===
+    // === tendencia ventas + ingresos ===
     const ventasLabels   = @json($ventasLineaLabels);
     const ventasCant     = @json($ventasLineaCantidades);
     const ventasIngresos = @json($ventasLineaIngresos);
@@ -218,7 +218,7 @@
         }
     });
 
-    // === DONA VENTAS POR MARCA ===
+    // === dona ventas marca ===
     const marcasLabels = @json($ventasPorMarcaLabels);
     const marcasData   = @json($ventasPorMarcaData);
 

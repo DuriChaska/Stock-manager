@@ -5,11 +5,11 @@
 @section('content')
 <div class="p-10">
 
-    {{-- ENCABEZADO --}}
+    
     <h1 class="text-3xl font-bold">Gestión de Proveedores</h1>
     <p class="mb-8 text-gray-600">Administra los Proveedores del sistema</p>
 
-    {{-- Tarjetas de estadísticas --}}
+    {{-- tarjetas de estadisticas --}}
     <div class="grid grid-cols-1 gap-6 mb-10 md:grid-cols-3">
 
         <div class="p-6 bg-white shadow rounded-2xl">
@@ -29,10 +29,10 @@
 
     </div>
 
-    {{-- BUSCADOR + BOTON --}}
+    {{-- buscador + boton --}}
     <div class="flex items-center justify-between w-full pb-6">
 
-        {{-- Buscador --}}
+        {{-- buscador --}}
         <form action="{{ route('proveedores.index') }}" method="GET" class="w-full md:w-2/3">
             <div class="relative">
                 <svg class="absolute w-5 h-5 text-gray-400 left-3 top-2.5"
@@ -47,32 +47,30 @@
             </div>
         </form>
 
-        {{-- Botón agregar --}}
+        {{-- boton agregar --}}
         <a href="{{ route('proveedores.create') }}"
            class="px-6 py-2 ml-6 text-white bg-[#97BB5C] rounded-full hover:bg-green-700">
             + Agregar Proveedor
         </a>
     </div>
 
-    {{-- LISTADO --}}
-<div class="grid grid-cols-1 gap-6">
-
+    
     @foreach($proveedores as $proveedor)
 
-        {{-- TARJETA DEL PROVEEDOR --}}
+        {{-- tarjeta del proveedor --}}
         <div class="w-full p-6 transition bg-white border border-gray-200 shadow-md rounded-2xl hover:shadow-lg">
 
-            {{-- ENCABEZADO --}}
+            {{-- encabezado --}}
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-bold text-gray-800">{{ $proveedor->nombre_contacto }}</h2>
 
-            {{-- ESTADO --}}
+            {{-- estado --}}
             <div class="flex items-center gap-2 px-4 py-2 mt-1 font-semibold text-white bg-green-300 shadow-md rounded-xl">
                 <span class="w-2 h-2 bg-green-500 rounded-full"></span>
                 <span class="text-sm font-semibold text-green-700">Activo</span>
             </div>
 
-                {{-- Acciones --}}
+                {{-- acciones --}}
                 <div class="flex items-center gap-3">
                     <a href="{{ route('proveedores.show', $proveedor) }}">
                         <img src="{{ asset('images/eye_visible_hide_hidden_show_icon_145988.png') }}" class="w-5 opacity-70 hover:opacity-100">
@@ -95,7 +93,7 @@
             </div>
 
            
-            {{-- INFORMACIÓN GENERAL --}}
+            {{-- informacion general --}}
             <p class="flex items-center gap-2 mt-2 font-medium text-gray-700">
                 <img src="{{ asset('images/company_workplace_building_office_icon_262568.png') }}" class="w-4">
                 {{ $proveedor->nombre_empresa }}
@@ -130,7 +128,7 @@
                 @endif
             </div>
 
-            {{-- ESTADÍSTICAS EXTRA --}}
+            {{-- estadisticas extra --}}
             <div class="flex justify-between mt-4 text-sm font-medium text-gray-700">
                 <span>Productos: {{ $stats['total_productos'] }}</span>
                 <span>Total Compras: ${{ number_format($stats['total_compras'], 0) }}</span>

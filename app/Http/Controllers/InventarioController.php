@@ -9,50 +9,52 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Notifications\StockBajoNotification;
 use App\Models\Marca;
+use Illuminate\Support\Facades\Storage;
 
 
 class InventarioController extends Controller
 {
-    // Mostrar inventario
+
+    
     public function index()
     {
         $productos = Producto::with('proveedor')->get();
         return view('inventario.index', compact('productos'));
     }
 
-    // Formulario crear
-   public function create()
+    
+    public function create()
     {
         $proveedores = Proveedor::all();
-        $marcas = Marca::all(); // YA EXISTE
-
+        $marcas = Marca::all(); 
         return view('inventario.create', compact('proveedores', 'marcas'));
     }
 
-
-
-
-    // Guardar producto
+    // guardar nuevo producto
     public function store(Request $request)
     {
+        // validaciones basicas
         $request->validate([
             'nombre'       => 'required|string|max:255',
             'precio'       => 'required|numeric|min:0',
             'existencia'   => 'required|integer|min:0',
             'proveedor_id' => 'required|exists:proveedores,id',
+            'marca_id'     => 'required|exists:marcas,id',
             'imagen'       => 'nullable|image|max:2048'
         ]);
 
+        // obtener todos los datos del request
         $data = $request->all();
 
-        // Guardar imagen si existe
+        // guardar imagen si el usuario subio una
         if ($request->hasFile('imagen')) {
             $data['imagen'] = $request->file('imagen')->store('productos', 'public');
         }
 
+        // crear producto
         $producto = Producto::create($data);
 
-        // Notificar por stock bajo
+        // enviar notificación si el producto queda con stock bajo
         if ($producto->existencia < 10) {
             foreach (User::where('role_id', 1)->get() as $admin) {
                 $admin->notify(new StockBajoNotification($producto));
@@ -63,7 +65,7 @@ class InventarioController extends Controller
             ->with('success', 'Producto registrado correctamente.');
     }
 
-    // Editar
+    
     public function edit($id)
     {
         $producto = Producto::findOrFail($id);
@@ -73,33 +75,66 @@ class InventarioController extends Controller
         return view('inventario.edit', compact('producto', 'marcas', 'proveedores'));
     }
 
-    // Actualizar
+    // actualizar producto
     public function update(Request $request, $id)
     {
+        // validar datos enviados por el usuario
         $request->validate([
             'nombre'       => 'required|string|max:255',
             'precio'       => 'required|numeric|min:0',
             'existencia'   => 'required|integer|min:0',
+            'marca_id'     => 'required|exists:marcas,id',
             'proveedor_id' => 'required|exists:proveedores,id',
+            'imagen'       => 'nullable|image|max:2048'
         ]);
 
+        // buscar producto a actualizar
         $producto = Producto::findOrFail($id);
-        $producto->update($request->all());
+
+        // obtener todos los datos
+        $data = $request->all();
+
+        // si el usuario subió nueva imagen, la guardo
+        if ($request->hasFile('imagen')) {
+
+            // si ya tenía imagen, la elimino del storage
+            if ($producto->imagen) {
+                \Storage::disk('public')->delete($producto->imagen);
+            }
+
+            // guardar nueva imagen
+            $data['imagen'] = $request->file('imagen')->store('productos', 'public');
+        }
+
+        // si no está usando talla, eliminar valor
+        if (!$request->has('talla') || $request->talla == null) {
+            $data['talla'] = null;
+        }
+
+        // actualizar producto con los datos nuevos
+        $producto->update($data);
 
         return redirect()->route('inventario.index')
             ->with('success', 'Producto actualizado correctamente.');
     }
 
-    // Eliminar
+  
     public function destroy($id)
     {
         $producto = Producto::findOrFail($id);
+
+       
+        if ($producto->imagen) {
+            \Storage::disk('public')->delete($producto->imagen);
+        }
+
         $producto->delete();
 
         return redirect()->route('inventario.index')
             ->with('success', 'Producto eliminado correctamente.');
     }
 
+    
     public function show($id)
     {
         $producto = Producto::with(['marca', 'proveedor'])->findOrFail($id);

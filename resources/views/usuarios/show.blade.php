@@ -4,7 +4,7 @@
 <div class="max-w-3xl p-6 mx-auto bg-white shadow-lg rounded-2xl">
 
     <div class="flex items-center gap-4 mb-6">
-        <!-- Avatar -->
+        <!-- avatar -->
         <div class="flex items-center justify-center w-16 h-16 text-2xl font-bold text-white rounded-full
                     bg-gradient-to-br from-[#97BB5C] to-[#749646]">
             {{ strtoupper(substr($user->name, 0, 1)) }}

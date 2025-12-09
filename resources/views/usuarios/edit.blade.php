@@ -24,7 +24,7 @@
 
                     <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 
-                        {{-- Nombre --}}
+                        {{-- nombre --}}
                         <div>
                             <label class="font-semibold">Nombre *</label>
                             <input type="text" name="name"
@@ -37,7 +37,7 @@
                             @enderror
                         </div>
 
-                        {{-- Correo --}}
+                        {{-- correo --}}
                         <div>
                             <label class="font-semibold">Correo *</label>
                             <input type="email" name="email"
@@ -50,7 +50,7 @@
                             @enderror
                         </div>
 
-                        {{-- Rol --}}
+                        {{-- rol --}}
                         <div>
                             <label class="font-semibold">Rol *</label>
                             <select name="role_id"
@@ -71,7 +71,7 @@
                             @enderror
                         </div>
 
-                        {{-- Nueva contraseña --}}
+                        {{-- nueva contraseña --}}
                         <div>
                             <label class="font-semibold">Nueva contraseña (opcional)</label>
                             <input type="password" name="password"
