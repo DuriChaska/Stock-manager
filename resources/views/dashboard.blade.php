@@ -13,7 +13,7 @@
     <div class="grid grid-cols-4 gap-4">
         
         {{-- productos --}}
-        <a href="{{ route('productos.index') }}"class="flex items-center justify-between p-4 transition shadow bg-lime-200 hover:bg-lime-300 rounded-xl">
+        <a href="{{ route('inventario.index') }}"class="flex items-center justify-between p-4 transition shadow bg-lime-200 hover:bg-lime-300 rounded-xl">
         <div class="flex flex-col">
             <span class="text-lg font-semibold">Total Productos </span>
             <span class="text-3xl font-bold text-gray-800">{{ $total_productos }}</span>

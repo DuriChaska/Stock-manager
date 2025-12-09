@@ -12,14 +12,14 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::with('role')->get();
+        $users = User::all();
 
         return view('usuarios.index', [
-            'users'          => $users,
-            'totalUsuarios'  => $users->count(),
-            'totalAdmins'    => $users->where('role.name', 'administrador')->count(),
-            'totalVendedores'=> $users->where('role.name', 'vendedor')->count(),
-            'totalAlmacen'   => $users->where('role.name', 'almacen')->count(),
+            'users' => $users,
+            'totalUsuarios'   => $users->count(),
+            'totalAdmins'     => $users->where('role_id', 1)->count(),
+            'totalVendedores' => $users->where('role_id', 2)->count(),
+            'totalAlmacen'    => $users->where('role_id', 3)->count(),
         ]);
     }
 
@@ -31,18 +31,60 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
-            'role_id'  => 'required|exists:roles,id',
+        $request->validate([
+            'name'     => 'required',
+            'email'    => 'required|email|unique:users',
+            'password' => 'required|min:6',
+            'role_id'  => 'required',
         ]);
 
-        $data['password'] = bcrypt($data['password']);
-
-        User::create($data);
+        User::create([
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'password' => bcrypt($request->password),
+            'role_id'  => $request->role_id,
+        ]);
 
         return redirect()->route('usuarios.index')
             ->with('success', 'Usuario creado correctamente.');
+    }
+
+    public function edit(User $usuario)
+    {
+        $roles = Role::all();
+        return view('usuarios.edit', compact('usuario', 'roles'));
+    }
+
+    public function update(Request $request, User $usuario)
+    {
+        $request->validate([
+            'name'     => 'required',
+            'email'    => "required|email|unique:users,email,{$usuario->id}",
+            'role_id'  => 'required',
+        ]);
+
+        $usuario->update([
+            'name'    => $request->name,
+            'email'   => $request->email,
+            'role_id' => $request->role_id,
+        ]);
+
+        return redirect()->route('usuarios.index')
+            ->with('success', 'Usuario actualizado.');
+    }
+
+    public function destroy(User $usuario)
+    {
+        $usuario->delete();
+
+        return redirect()->route('usuarios.index')
+            ->with('success', 'Usuario eliminado.');
+    }
+
+    public function show($id)
+    {
+        $user = User::with('role')->findOrFail($id);
+
+        return view('usuarios.show', compact('user'));
     }
 }

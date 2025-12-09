@@ -1,131 +1,118 @@
 @extends('layouts.app')
 
+@section('title', 'Usuarios')
+
 @section('content')
-<div class="p-6">
 
-    <h1 class="mb-1 text-4xl font-bold">Usuarios</h1>
-    <p class="mb-8 text-gray-600">Administra los usuarios del sistema</p>
+<div class="flex items-center justify-between mb-6">
+    <h1 class="text-3xl font-bold">Usuarios</h1>
 
-    {{-- CONTENEDOR PRINCIPAL --}}
-    <div class="p-8 bg-white shadow-xl rounded-3xl">
+    <a href="{{ route('usuarios.create') }}"
+       class="px-5 py-2 text-white transition bg-green-600 rounded-full shadow hover:bg-green-700">
+        + Agregar Usuario
+    </a>
+</div>
 
-        {{-- Encabezado de tabla --}}
-        <div class="grid grid-cols-6 pb-3 font-semibold text-gray-600 border-b">
+<div class="p-6 bg-white shadow-xl rounded-2xl">
 
-            <div class="flex items-center gap-2">
-                <img src="/images/users_89368.png" class="w-5">
-                Usuarios
-            </div>
+    <table class="w-full">
+        <thead>
+            <tr class="font-semibold text-gray-600 border-b">
+                <th class="flex items-center gap-2 py-3 text-left">
+                    <i class="text-xl fa-regular fa-user"></i> Usuarios
+                </th>
+                <th class="py-3 text-left">Correo Electrónico</th>
+                <th class="py-3 text-left">Rol</th>
+                <th class="py-3 text-left">Actividad</th>
+                <th class="py-3 text-center">Acciones</th>
+            </tr>
+        </thead>
 
-            <div class="col-span-2">Correo Electrónico</div>
-            <div>Rol</div>
-            <div>Actividad</div>
-            <div>Acciones</div>
-        </div>
+        <tbody>
+            @foreach ($users as $u)
+            <tr class="border-b hover:bg-gray-50">
+                
+                <!-- Avatar + Nombre -->
+                <td class="py-4">
+                    <div class="flex items-center gap-4">
 
-        {{-- LISTADO --}}
-        <div class="divide-y">
+                        <div class="flex items-center justify-center w-10 h-10 font-bold text-white bg-green-600 rounded-full">
+                            {{ strtoupper(substr($u->name, 0, 1)) }}
+                        </div>
 
-            @foreach ($users as $user)
+                        <div>
+                            <p class="font-semibold text-gray-800">{{ $u->name }}</p>
+                            <p class="text-sm text-gray-500">
+                                Último acceso:
+                                {{ $u->last_login_at ? $u->last_login_at->diffForHumans() : 'Nunca' }}
+                            </p>
+                        </div>
 
-            <div class="grid items-center grid-cols-6 py-4">
-
-                {{-- Usuario + Iniciales --}}
-                <div class="flex items-center gap-4">
-
-                    {{-- Círculo con iniciales --}}
-                    <div class="w-10 h-13 rounded-full bg-[#cfe3a4] flex items-center justify-center font-bold text-gray-700">
-                        {{ strtoupper(substr($user->name, 0, 2)) }}
                     </div>
+                </td>
 
-                    <p class="text-sm text-gray-500">
-                        Último acceso: {{ $user->lastSeenHuman() }}
-                    </p>
+                <!-- Email -->
+                <td class="text-gray-700">{{ $u->email }}</td>
 
-                </div>
-
-                {{-- Email --}}
-                <div class="col-span-2 text-gray-700">
-                    {{ $user->email }}
-                </div>
-
-    <div>
-    @php
-        // Función anónima (NO se redeclara)
-        $normalizar = function($cadena) {
-            $cadena = strtolower($cadena);
-            return str_replace(
-                ['á','é','í','ó','ú','ñ'],
-                ['a','e','i','o','u','n'],
-                $cadena
-            );
-        };
-
-        // Obtener rol normalizado y rol original
-        $rolOriginal = $user->rol->name ?? 'Sin Rol';
-        $rol = $normalizar($rolOriginal);
-
-        // Colores por rol
-        $colores = [
-            'administrador' => 'bg-[#B6EA60] text-black',
-            'vendedor'      => 'bg-[#19C827] text-white',
-            'almacen'       => 'bg-[#0AA617] text-white',
-        ];
-
-        // Iconos por rol (tú colocas tus imágenes)
-        $iconos = [
-            'administrador' => '/images/shield_icon_125161.png',
-            'vendedor'      => '/images/4105931-add-to-cart-buy-cart-sell-shop-shopping-cart_113919.png',
-            'almacen'       => '/images/wondicon-ui-free-parcel_111208.png',
-        ];
-
-        // Asignar color e icono
-        $color = $colores[$rol] ?? 'bg-gray-300 text-gray-800';
-        $icono = $iconos[$rol] ?? '/images/icon-default.png';
-    @endphp
-
-    <span class="px-4 py-1 rounded-full shadow text-sm flex-1 items-center gap-2 {{ $color }}">
-        <img src="{{ $icono }}" class="w-4 h-4" alt="icono {{ $rolOriginal }}">
-        {{ $rolOriginal }}
-    </span>
-</div>
-
-
-                {{-- Actividad (siempre activo por ahora) --}}
-                <div>
-                    <span class="items-center flex-1 gap-1 px-4 py-1 text-sm text-green-700 bg-green-200 rounded-full">
-                        ● Activo
+                <!-- Rol -->
+                <td>
+                    <span class="px-3 py-1 text-sm text-green-700 bg-green-100 rounded-full">
+                        {{ $u->role->name ?? 'Sin rol' }}
                     </span>
-                </div>
+                </td>
 
-                {{-- ACCIONES --}}
-                <div class="flex gap-4">
+                <!-- Estado -->
+                <td>
+                    @if ($u->active)
+                        <span class="px-3 py-1 text-sm text-green-800 bg-green-200 rounded-full">
+                            ● Activo
+                        </span>
+                    @else
+                        <span class="px-3 py-1 text-sm text-red-800 bg-red-200 rounded-full">
+                            ● Inactivo
+                        </span>
+                    @endif
+                </td>
 
-                    {{-- Editar --}}
-                    <a href="{{ route('usuarios.edit', $user->id) }}" class="transition hover:scale-110">
-                        <img src="/images/pencil_icon.png" class="w-5">
-                    </a>
+                <!-- Acciones -->
+                <td class="text-center">
+                    <div class="flex justify-center gap-4 text-xl">
 
-                    {{-- Eliminar --}}
-                    <form action="{{ route('usuarios.destroy', $user->id) }}" method="POST"
-                          onsubmit="return confirm('¿Seguro que deseas eliminar este usuario?')">
-                        @csrf
-                        @method('DELETE')
+                        <!-- VER -->
+                        <a href="{{ route('usuarios.show', $u->id) }}">
+                            <img src="/images/eye_visible_hide_hidden_show_icon_145988.png" class="w-5 opacity-70 hover:opacity-100">
+                        </a>
 
-                        <button class="transition hover:scale-110">
-                            <img src="/images/trash_icon.png" class="w-5">
-                        </button>
-                    </form>
+                        <!-- EDITAR -->
+                        <a href="{{ route('usuarios.edit', $u->id) }}">
+                            <img src="/images/creative_design_draw_illustration_pen_pencil_write_icon_123895.png" class="w-5 opacity-70 hover:opacity-100">
+                        </a>
 
-                </div>
+                        <!-- ELIMINAR -->
+                        <form action="{{ route('usuarios.destroy', $u->id) }}" method="POST"
+                            onsubmit="return confirm('¿Eliminar usuario?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">
+                                <img src="/images/1485477104-basket_78591.png" class="w-5 opacity-70 hover:opacity-100">
+                            </button>
+                        </form>
 
-            </div>
+                    </div>
+                </td>
 
+            </tr>
             @endforeach
+        </tbody>
 
-        </div>
-
-    </div>
+    </table>
 
 </div>
+
+
+
+
+
+
+
 @endsection

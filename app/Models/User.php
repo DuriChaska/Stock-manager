@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Carbon\Carbon;
+use App\Models\Role;
+
 
 class User extends Authenticatable
 {
@@ -46,4 +48,12 @@ class User extends Authenticatable
         // Gracias al cast, ya es un objeto Carbon
         return $this->last_login_at->diffForHumans();
     }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    protected $dates = ['last_login_at'];
+
 }

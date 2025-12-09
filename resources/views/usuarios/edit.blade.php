@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Crear Usuario')
+@section('title', 'Editar Usuario')
 
 @section('content')
 
 <div class="flex items-center justify-between mb-6">
-    <h1 class="text-3xl font-bold">Agregar Usuario</h1>
+    <h1 class="text-3xl font-bold">Editar Usuario</h1>
 
     <a href="{{ route('usuarios.index') }}"
        class="px-4 py-2 transition bg-gray-300 rounded-full hover:bg-gray-400">
@@ -15,8 +15,9 @@
 
 <div class="p-6 bg-white shadow-xl rounded-2xl">
 
-    <form action="{{ route('usuarios.store') }}" method="POST">
+    <form action="{{ route('usuarios.update', $usuario->id) }}" method="POST">
         @csrf
+        @method('PUT')
 
         <div class="grid grid-cols-2 gap-6">
 
@@ -24,8 +25,8 @@
             <div>
                 <label class="font-semibold">Nombre *</label>
                 <input type="text" name="name"
-                    value="{{ old('name') }}"
-                    class="w-full mt-1 px-4 py-2 border rounded-xl shadow-sm 
+                    value="{{ old('name', $usuario->name) }}"
+                    class="w-full mt-1 px-4 py-2 border rounded-xl shadow-sm
                            @error('name') border-red-500 @enderror
                            focus:ring-green-400 focus:border-green-500">
                 @error('name')
@@ -37,7 +38,7 @@
             <div>
                 <label class="font-semibold">Correo *</label>
                 <input type="email" name="email"
-                    value="{{ old('email') }}"
+                    value="{{ old('email', $usuario->email) }}"
                     class="w-full mt-1 px-4 py-2 border rounded-xl shadow-sm
                            @error('email') border-red-500 @enderror
                            focus:ring-green-400 focus:border-green-500">
@@ -54,10 +55,11 @@
                            @error('role_id') border-red-500 @enderror
                            focus:ring-green-400 focus:border-green-500">
 
-                    <option value="" disabled selected>Selecciona un rol</option>
-
                     @foreach ($roles as $role)
-                        <option value="{{ $role->id }}">{{ ucfirst($role->name) }}</option>
+                        <option value="{{ $role->id }}" 
+                            {{ $usuario->role_id == $role->id ? 'selected' : '' }}>
+                            {{ ucfirst($role->name) }}
+                        </option>
                     @endforeach
 
                 </select>
@@ -66,32 +68,16 @@
                 @enderror
             </div>
 
-            <!-- Pass -->
+            <!-- Nuevo Password -->
             <div>
-                <label class="font-semibold">Contraseña *</label>
+                <label class="font-semibold">Nueva contraseña (opcional)</label>
                 <input type="password" name="password"
-                    class="w-full mt-1 px-4 py-2 border rounded-xl shadow-sm
-                           @error('password') border-red-500 @enderror
-                           focus:ring-green-400 focus:border-green-500">
-                @error('password')
-                    <p class="text-sm text-red-600">{{ $message }}</p>
-                @enderror
+                    class="w-full px-4 py-2 mt-1 border shadow-sm rounded-xl focus:ring-green-400 focus:border-green-500">
+                <small class="text-gray-500">Déjalo vacío si no deseas cambiarla.</small>
             </div>
 
         </div>
 
         <div class="flex justify-end gap-4 mt-6">
             <a href="{{ route('usuarios.index') }}"
-               class="px-4 py-2 border rounded-xl hover:bg-gray-100">
-                Cancelar
-            </a>
-
-            <button class="px-5 py-2 text-white bg-green-600 shadow rounded-xl hover:bg-green-700">
-                Guardar usuario
-            </button>
-        </div>
-
-    </form>
-</div>
-
-@endsection
+              
