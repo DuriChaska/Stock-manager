@@ -99,7 +99,7 @@ class InventarioController extends Controller
 
             // si ya tenía imagen, la elimino del storage
             if ($producto->imagen) {
-                \Storage::disk('public')->delete($producto->imagen);
+                Storage::disk('public')->delete($producto->imagen);
             }
 
             // guardar nueva imagen
@@ -125,7 +125,7 @@ class InventarioController extends Controller
 
        
         if ($producto->imagen) {
-            \Storage::disk('public')->delete($producto->imagen);
+            Storage::disk('public')->delete($producto->imagen);
         }
 
         $producto->delete();
