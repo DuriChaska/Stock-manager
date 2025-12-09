@@ -11,6 +11,7 @@ use App\Models\Role;
 
 class User extends Authenticatable
 {
+    use Notifiable;
     use HasFactory, Notifiable;
 
     protected $fillable = [

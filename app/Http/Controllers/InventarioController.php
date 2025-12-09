@@ -6,6 +6,8 @@ use App\Models\Producto;
 use App\Models\Marca;
 use Illuminate\Http\Request;
 use App\Models\Proveedor;
+use App\Models\User;
+use App\Notifications\StockBajoNotification;
 
 class InventarioController extends Controller
 {
@@ -26,22 +28,31 @@ class InventarioController extends Controller
     }
 
 
+
     // Guardar producto
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => 'required',
-            'marca_id' => 'required',
-            'talla' => 'nullable',
+            'nombre'     => 'required',
+            'marca_id'   => 'required',
+            'talla'      => 'nullable',
             'existencia' => 'required|integer|min:0',
-            'precio' => 'required|numeric|min:0'
+            'precio'     => 'required|numeric|min:0'
         ]);
 
-        Producto::create($request->all());
+        $producto = Producto::create($request->all());
+
+        // 🔔 Notificación por stock bajo
+        if ($producto->existencia < 10) {
+            foreach (User::where('role_id', 1)->get() as $admin) {
+                $admin->notify(new StockBajoNotification($producto));
+            }
+        }
 
         return redirect()->route('inventario.index')
             ->with('success', 'Producto registrado correctamente.');
     }
+
 
     // Mostrar formulario de edición
     public function edit($id)

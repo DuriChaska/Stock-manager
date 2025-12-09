@@ -9,6 +9,7 @@ use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\UserController; 
 use App\Http\Controllers\ReportController; 
 use App\Http\Controllers\MovimientosController;
+use Illuminate\Support\Facades\Auth;
 
 
 // ---------------------------------------------------------------------
@@ -32,6 +33,11 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 // ---------------------------------------------------------------------
 Route::middleware('auth')->group(function () {
 
+
+    Route::get('/notificaciones/leer', function () {
+        Auth::user()->unreadNotifications->markAsRead();
+        return response()->json(['ok' => true]);
+    })->name('notificaciones.leer');
     // -------------------------------------------------------
     // PERFIL
     // -------------------------------------------------------
