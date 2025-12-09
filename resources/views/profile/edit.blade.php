@@ -6,10 +6,10 @@
 
 <div class="max-w-4xl mx-auto mt-10">
 
-    <!-- Encabezado del perfil -->
+    
     <div class="flex items-center gap-6 p-6 mb-10 bg-white shadow rounded-xl">
         
-        <!-- Avatar gigante -->
+        <!-- avatar gigante -->
         <div class="w-20 h-20 flex items-center justify-center rounded-full text-white text-3xl font-bold
                     bg-gradient-to-br from-[#97BB5C] to-[#749646] shadow">
             {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
@@ -23,7 +23,7 @@
     </div>
 
 
-    <!-- Actualizar Datos Personales -->
+    <!-- actualizar datos -->
     <div class="p-6 mb-10 bg-white shadow rounded-xl">
 
         <h2 class="mb-4 text-xl font-semibold text-gray-700">Información Personal</h2>
@@ -32,21 +32,21 @@
             @csrf
             @method('PATCH')
 
-            <!-- Nombre -->
+            <!-- nombre -->
             <div>
                 <label class="font-medium text-gray-600">Nombre</label>
                 <input type="text" name="name" value="{{ old('name', Auth::user()->name) }}"
                        class="w-full px-4 py-2 mt-1 border rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500">
             </div>
 
-            <!-- Correo -->
+            <!-- correo -->
             <div>
                 <label class="font-medium text-gray-600">Correo electrónico</label>
                 <input type="email" name="email" value="{{ old('email', Auth::user()->email) }}"
                        class="w-full px-4 py-2 mt-1 border rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500">
             </div>
 
-            <!-- Botón -->
+            <!-- boton -->
             <button class="px-6 py-2 bg-[#749646] text-white rounded-lg shadow hover:bg-[#5f7c38] transition">
                 Guardar Cambios
             </button>
@@ -54,7 +54,7 @@
     </div>
 
 
-    <!-- Cambiar Contraseña -->
+    <!-- cambiar contraseña -->
     <div class="p-6 mb-10 bg-white shadow rounded-xl">
 
         <h2 class="mb-4 text-xl font-semibold text-gray-700">Cambiar Contraseña</h2>
@@ -88,7 +88,7 @@
     </div>
 
 
-    <!-- Eliminar Cuenta -->
+    <!-- eliminar cuenta -->
     <div class="p-6 bg-white shadow rounded-xl">
 
         <h2 class="mb-4 text-xl font-semibold text-red-600">Eliminar Cuenta</h2>
